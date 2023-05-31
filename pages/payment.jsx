@@ -1,7 +1,7 @@
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import CheckoutComponent from "../components/CheckoutComponent";
 import Layout from "../components/Layout";
 import { Store } from "../utils/Store";
