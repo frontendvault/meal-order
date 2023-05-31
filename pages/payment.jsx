@@ -13,25 +13,25 @@ export default function PaymentScreen() {
   // const { cart } = state;
   // const { shippingAddress, paymentMethod } = cart;
 
-  // const submitHandler = (e) => {
-  //   e.preventDefault();
-  //   if (!selectedPaymentMethod) {
-  //     return toast.error("Payment method is required");
-  //   }
-  //   dispatch({ type: "SAVE_PAYMENT_METHOD", payload: selectedPaymentMethod });
-  //   Cookies.set(
-  //     "cart",
-  //     JSON.stringify({ ...cart, paymentMethod: selectedPaymentMethod })
-  //   );
-  //   router.push("/placeorder");
-  // };
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (!selectedPaymentMethod) {
+      return toast.error("Payment method is required");
+    }
+    dispatch({ type: "SAVE_PAYMENT_METHOD", payload: selectedPaymentMethod });
+    Cookies.set(
+      "cart",
+      JSON.stringify({ ...cart, paymentMethod: selectedPaymentMethod })
+    );
+    router.push("/placeorder");
+  };
 
-  // useEffect(() => {
-  //   if (!shippingAddress.address) {
-  //     return router.push("/shipping");
-  //   }
-  //   setSelectedPaymentMethod(paymentMethod || "");
-  // }, [paymentMethod, router, shippingAddress.address]);
+  useEffect(() => {
+    if (!shippingAddress.address) {
+      return router.push("/shipping");
+    }
+    setSelectedPaymentMethod(paymentMethod || "");
+  }, [paymentMethod, router, shippingAddress.address]);
 
   return (
     <Layout title="Payment Method">
