@@ -1,17 +1,17 @@
-// import Cookies from "js-cookie";
-// import { useRouter } from "next/router";
-// import React, { useContext, useEffect, useState } from "react";
-// import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
+import React, { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import CheckoutComponent from "../components/CheckoutComponent";
 import Layout from "../components/Layout";
-// import { Store } from "../utils/Store";
+import { Store } from "../utils/Store";
 
 export default function PaymentScreen() {
-  // const router = useRouter();
-  // const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
-  // const { state, dispatch } = useContext(Store);
-  // const { cart } = state;
-  // const { shippingAddress, paymentMethod } = cart;
+  const router = useRouter();
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
+  const { state, dispatch } = useContext(Store);
+  const { cart } = state;
+  const { shippingAddress, paymentMethod } = cart;
 
   const submitHandler = (e) => {
     e.preventDefault();
