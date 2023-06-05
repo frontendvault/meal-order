@@ -1,0 +1,1 @@
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[519],{1602:function(n,_,u){(window.__NEXT_P=window.__NEXT_P||[]).push(["/meal/modal",function(){return u(9937)}])}},function(n){n.O(0,[445,61,790,774,888,179],function(){return n(n.s=1602)}),_N_E=n.O()}]);

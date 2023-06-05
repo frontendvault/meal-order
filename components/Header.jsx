@@ -19,11 +19,11 @@ const Header = () => {
     setCartItemsCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0));
   }, [cart.cartItems]);
 
-  // const logoutClickHandler = () => {
-  //   Cookies.remove("cart");
-  //   dispatch({ type: "CART_RESET" });
-  //   signOut({ callbackUrl: "/login" });
-  // };
+  const logoutClickHandler = () => {
+    Cookies.remove("cart");
+    dispatch({ type: "CART_RESET" });
+    signOut({ callbackUrl: "/login" });
+  };
 
   return (
     <header className="fixed z-20 w-screen py-1 p-4 md:px-16 bg-white  border-b-4 border-blue-700">
@@ -87,7 +87,9 @@ const Header = () => {
             </Link>
           )} */}
 
-          {/* <button onClick="/signup" className="text-blue-600 font-bold">My Account</button> */}
+         <Link href="/signup"> 
+         <button className="text-blue-600 font-bold">My Account</button>
+         </Link>
           <button className="py-2 px-5 bg-blue-600 rounded text-white font-bold">
             Order Now
           </button>
@@ -158,7 +160,9 @@ const Header = () => {
               </Link>
             )} */}
 
-            {/* <button onClick="/signup" className="text-blue-600 font-bold">My Account</button> */}
+<Link href="/signup">
+  <button className="text-blue-600 font-bold">My Account</button>
+  </Link>
             <Link href={""}>
               <a className="bg-blue-500 text-white w-full text-center py-2">
                 {" "}
