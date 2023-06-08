@@ -31,7 +31,12 @@ function MealItem({ meal }) {
           {meal.category}
         </p>
         <Link href={`/meal/${meal.slug}`}>
-          <Image src={meal.imageUrl} alt={meal.name} width={200} height={160} />
+          <Image
+            src={meal.imageUrl}
+            alt={meal.name}
+            // width={200}
+            // height={160}
+          />
         </Link>
 
         <div className="px-2" onClick={() => setOpenModal(true)}>
