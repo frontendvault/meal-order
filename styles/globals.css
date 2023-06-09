@@ -17,14 +17,18 @@
 }
 
 body {
-
 }
 
+.main-bg {
+  background: url(../public/images/11.jpg) no-repeat center center;
+  background-size: cover;
+  width: 100%;
+  height: 100vh;
+}
 
-.main-bg { background: url(../public/images/11.jpg) no-repeat center center; background-size: cover; width: 100%; height: 100vh;}
-.card {
-  @apply shadow-lg bg-gray-100 rounded
-}
-.card img{ 
-  @apply  rounded-t
-}
+/* Component */
+@import "./modal.css";
+@import "./card.css";
+
+/* Page */
+@import "./pages/faq.css";

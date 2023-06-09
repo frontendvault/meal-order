@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
 import Layout from "../components/Layout";
-import FAQ from "../components/FAQ";
 import Testimonials from "../components/Testimonials";
 import { Store } from "../utils/Store";
 
@@ -11,7 +10,7 @@ import dynamic from "next/dynamic";
 // import axios from "axios";
 // import { toast } from "react-toastify";
 import Image from "next/image";
-import { FaStar } from "react-icons/fa";
+import { Faqs } from "@/components/faq";
 
 function BagScreen() {
   const router = useRouter();
@@ -21,7 +20,6 @@ function BagScreen() {
     cart: { cartItems },
   } = state;
 
-  console.log(state.cart.cartItems);
   const removeMealHandler = (item) => {
     dispatch({ type: "CART_REMOVE_ITEM", payload: item });
   };
@@ -30,12 +28,7 @@ function BagScreen() {
   }
   const updateCartHandler = async (item, qty) => {
     const quantity = Number(qty);
-    // const { data } = await axios.get(`/api/meals/${item._id}`);
-    // if (data.countInStock < quantity) {
-    //   return toast.error("Sorry. Meal is out of stock");
-    // }
     dispatch({ type: "CART_ADD_ITEM", payload: { ...item, quantity } });
-    // toast.success("Meal updated in cart successfully");
   };
 
   return (
@@ -52,9 +45,6 @@ function BagScreen() {
         <div
           // className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16"
           className="mt-1 md:mt-12 flex items-start flex-col md:flex-row"
-
-          // action="/api/checkout"
-          // method="POST"
         >
           <section aria-labelledby="cart-heading" className="md:w-2/3">
             {cartItems.length === 0 ? (
@@ -131,21 +121,7 @@ function BagScreen() {
                           </div>
 
                           <p>{item.description}</p>
-                          <p>
-                            {item.rating}
-                            {/* {[0, 1, 2, 3, 4].map((rating) => (
-                              <FaStar
-                                key={rating}
-                                className={classNames(
-                                  meal.rating > rating
-                                    ? "text-yellow-400"
-                                    : "text-gray-200",
-                                  "h-5 w-5 flex-shrink-0"
-                                )}
-                                aria-hidden="true"
-                              />
-                            ))} */}
-                          </p>
+                          <p>{item.rating}</p>
 
                           <p className="flex justify-end font-bold text-2xl text-gray-900">
                             ${item.price}
@@ -241,8 +217,8 @@ function BagScreen() {
           />
         </div>
       </div>
-      <FAQ />
       <Testimonials />
+      <Faqs />
     </Layout>
   );
 }

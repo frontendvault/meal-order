@@ -1,0 +1,7 @@
+.card {
+  @apply shadow-sm bg-gray-100 rounded;
+}
+
+.card img {
+  @apply rounded-t;
+}

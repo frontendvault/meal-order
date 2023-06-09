@@ -4,6 +4,21 @@ import { Store } from "../utils/Store";
 import { FaBars, FaRegWindowClose } from "react-icons/fa";
 import Image from "next/image";
 
+const menuItems = [
+  {
+    name: "Our Menu",
+    url: "/menu",
+  },
+  {
+    name: "Our Bag",
+    url: "/bag",
+  },
+  {
+    name: "FAQ",
+    url: "/faq",
+  },
+];
+
 const Header = () => {
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
@@ -36,51 +51,16 @@ const Header = () => {
         </div>
 
         <div className="hidden md:flex justify-center items-center gap-8 text-blue-600 font-bold">
-          <Link href="/menu">Our Menu</Link>
-          <Link href="/bag">
-            <span className="relative ">
-              My Bag
-              {cart.cartItems.length > 0 && (
+          {menuItems.map((item) => (
+            <Link href={item.url} className="relative ">
+              {item.name}
+              {item.url === "/bag" && cart.cartItems.length > 0 && (
                 <span className="absolute -top-1 -right-4 ml-1 rounded-lg bg-red-600 px-2 text-xs font-bold text-white">
                   {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
                 </span>
               )}
-            </span>
-          </Link>
-          <button className="">FAQ</button>
-
-          {/* {status === "loading" ? (
-            "Loading"
-          ) : session?.user ? (
-            <Menu as="div" className="relative inline-block ">
-              <Menu.Button>{session.user.name}</Menu.Button>
-              <Menu.Items className="absolute right-0 w-56 origin-top-right shadow-lg bg-white">
-                <Menu.Item>
-                  <DropdownLink className="dropdown-link" href="/profile">
-                    Profile
-                  </DropdownLink>
-                </Menu.Item>
-                <Menu.Item>
-                  <DropdownLink className="dropdown-link" href="/order-history">
-                    Order History
-                  </DropdownLink>
-                </Menu.Item>
-                <Menu.Item>
-                  <a
-                    className="dropdown-link"
-                    href="#"
-                    onClick={logoutClickHandler}
-                  >
-                    Logout
-                  </a>
-                </Menu.Item>
-              </Menu.Items>
-            </Menu>
-          ) : (
-            <Link href="/login">
-              <a className="">My Account</a>
             </Link>
-          )} */}
+          ))}
 
           <Link href="/signup">
             <button className="text-blue-600 font-bold">My Account</button>
