@@ -1,11 +1,6 @@
 import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
 import { Store } from "../utils/Store";
-// import "react-toastify/dist/ReactToastify.css";
-// import { signOut, useSession } from "next-auth/react";
-import { Menu } from "@headlessui/react";
-// import DropdownLink from "./DropdownLink";
-// import Cookies from "js-cookie";
 import { FaBars, FaRegWindowClose } from "react-icons/fa";
 import Image from "next/image";
 
@@ -87,9 +82,9 @@ const Header = () => {
             </Link>
           )} */}
 
-         <Link href="/signup"> 
-         <button className="text-blue-600 font-bold">My Account</button>
-         </Link>
+          <Link href="/signup">
+            <button className="text-blue-600 font-bold">My Account</button>
+          </Link>
           <button className="py-2 px-5 bg-blue-600 rounded text-white font-bold">
             Order Now
           </button>
@@ -103,20 +98,23 @@ const Header = () => {
             >
               <FaRegWindowClose size={30} />
             </div>
-            <Link href="/menu" onClick={() => setMenu(!menu)}>
-              <a className="border-b border-blue-300 w-full text-center py-2">
-                Our Menu
-              </a>
+            <Link
+              href="/menu"
+              className="border-b border-blue-300 w-full text-center py-2"
+              onClick={() => setMenu(!menu)}
+            >
+              Our Menu
             </Link>
-            <Link href="/bag">
-              <a className="relative border-b border-blue-300 w-full text-center py-2">
-                My Bag
-                {cartItemsCount > 0 && (
-                  <span className="absolute -top-1 -right-4 ml-1 rounded-lg bg-red-600 px-2 text-xs font-bold text-white">
-                    {cartItemsCount}12
-                  </span>
-                )}
-              </a>
+            <Link
+              href="/bag"
+              className="relative border-b border-blue-300 w-full text-center py-2"
+            >
+              My Bag
+              {cartItemsCount > 0 && (
+                <span className="absolute -top-1 -right-4 ml-1 rounded-lg bg-red-600 px-2 text-xs font-bold text-white">
+                  {cartItemsCount}12
+                </span>
+              )}
             </Link>
             <Link href={"faq"} className="">
               FAQ
@@ -160,14 +158,14 @@ const Header = () => {
               </Link>
             )} */}
 
-<Link href="/signup">
-  <button className="text-blue-600 font-bold">My Account</button>
-  </Link>
-            <Link href={""}>
-              <a className="bg-blue-500 text-white w-full text-center py-2">
-                {" "}
-                Order Now{" "}
-              </a>
+            <Link href="/signup">
+              <button className="text-blue-600 font-bold">My Account</button>
+            </Link>
+            <Link
+              href={""}
+              className="bg-blue-500 text-white w-full text-center py-2"
+            >
+              Order Now{" "}
             </Link>
           </div>
         )}

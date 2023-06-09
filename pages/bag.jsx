@@ -103,7 +103,6 @@ function BagScreen() {
                         <Image
                           src={item.imageUrl}
                           alt={item.name}
-                          // className="h-10 md:h-40 w-10 md:w-40 flex-none  bg-gray-200 object-cover object-center rounded"
                           height={50}
                           width={50}
                         />
