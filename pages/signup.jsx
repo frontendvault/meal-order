@@ -1,55 +1,10 @@
-// import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useRouter } from "next/router";
 import Head from "next/head";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
-// import { signIn } from "next-auth/react";
-// import { getError } from "../utils/error";
-// import { toast } from "react-toastify";
-// import { useSession } from "next-auth/react";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
-import Image from "next/image";
 
 function signup() {
-  const router = useRouter();
-  //  const provider = new GoogleAuthProvider();
-  // const auth = getAuth();
-
-  // const signUpWithGoogle = () => {
-  //   signInWithPopup(auth, provider)
-  //     .then((result) => {
-  //       // This gives you a Google Access Token. You can use it to access the Google API.
-  //       const credential = GoogleAuthProvider.credentialFromResult(result);
-  //       const token = credential.accessToken;
-  //       // The signed-in user info.
-  //       const user = result.user;
-  //       console.log(user);
-  //       router.push("/test");
-  //     })
-  //     .catch((error) => {
-  //       // Handle Errors here.
-  //       const errorCode = error.code;
-  //       const errorMessage = error.message;
-  //       // The email of the user's account used.
-  //       const email = error.customData.email;
-  //       // The AuthCredential type that was used.
-  //       const credential = GoogleAuthProvider.credentialFromError(error);
-  //       console.log(error);
-  //     });
-  // };
-
-  // const { data: session } = useSession();
-
-  // const { redirect } = router.query;
-
-  //When there is a change in the session, useEffect runs...
-  // useEffect(() => {
-  //   if (session?.user) {
-  //     router.push(redirect || "/");
-  //   }
-  // }, [router, session, redirect]);
-
   const {
     register,
     getValues,
@@ -57,28 +12,6 @@ function signup() {
     watch,
     formState: { errors },
   } = useForm();
-
-  // const submitHandler = async ({ firstName, lastName, email, password }) => {
-  //   console.log(firstName, lastName, email, password);
-  //   try {
-  //     await axios.post("/api/auth/signup", {
-  //       firstName,
-  //       lastName,
-  //       email,
-  //       password,
-  //     });
-  //     const result = await signIn("credentials", {
-  //       redirect: false,
-  //       email,
-  //       password,
-  //     });
-  //     if (result.error) {
-  //       toast.error(result.error);
-  //     }
-  //   } catch (err) {
-  //     toast.error(getError(err));
-  //   }
-  // };
 
   return (
     <>

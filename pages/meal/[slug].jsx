@@ -7,13 +7,9 @@ import data from "../../utils/data";
 
 import Features from "../../components/Menu/Features";
 import Testimonials from "../../components/Testimonials";
-import FAQ from "../../components/FAQ";
 import Layout from "../../components/Layout";
 import { Store } from "../../utils/Store";
-// import db from "../../utils/db";
-// import Meal from "../../models/Meal";
-// import axios from "axios";
-// import { toast } from "react-toastify";
+import { Faqs } from "@/components/faq";
 
 export default function MealScreen() {
   // const { meal } = props;
@@ -134,7 +130,7 @@ export default function MealScreen() {
         <div className="md:mt-20">
           <Features />
           <Testimonials />
-          <FAQ />
+          <Faqs />
         </div>
       </div>
     </Layout>

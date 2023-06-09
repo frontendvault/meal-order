@@ -53,11 +53,8 @@ function LoginScreen() {
       <div className="grid md:grid-cols-2 h-screen w-screen">
         <div className="col-1 bg-gray-200 hidden md:flex">
           <Image
-            // className="  h-screen w-full object-contain"
             src="/images/17.jpg"
             alt=""
-            // layout="fill"
-            // objectFit="contain"
             className="w-1/2"
             width={600}
             height={600}
