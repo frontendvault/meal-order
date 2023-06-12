@@ -34,4 +34,4 @@ const useUser = () => {
   return useContext(UserContext);
 };
 
-export default { UserProvider, useUser };
+export { UserProvider, useUser };
