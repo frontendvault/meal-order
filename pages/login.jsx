@@ -1,6 +1,5 @@
 import Head from "next/head";
 import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import * as yup from "yup";
@@ -25,7 +24,6 @@ function LoginScreen() {
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log(values);
       client
         .post("/v1/auth/login", values)
         .then(({ data }) => {

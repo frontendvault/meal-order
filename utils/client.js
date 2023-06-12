@@ -13,11 +13,12 @@ class Client {
     };
 
     createWithAuth = () => {
-        const auth_token = Cookies.get("auth_token");
+        const access_token = Cookies.get("access-token");
 
         this.axios.defaults.headers.common[
             "Authorization"
-        ] = `Bearer ${auth_token}`;
+        ] = `Bearer ${access_token}`;
+
         return this.axios;
     };
 }
