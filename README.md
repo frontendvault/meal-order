@@ -67,4 +67,3 @@ Check out the [Next.js deployment documentation](https://nextjs.org/docs/deploym
 Contributions to the MPO Project are currently not accepted as it is not an open-source project. However, feedback and suggestions are always welcome.
 ```
 
-Please review the updated README and make any necessary adjustments before sharing it with the incoming Yokunbo engineers.
