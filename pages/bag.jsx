@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
 import Layout from "../components/Layout";
 import Testimonials from "../components/Testimonials";
+import { FaStar } from "react-icons/fa";
 import { Store } from "../utils/Store";
 
 import dynamic from "next/dynamic";
@@ -11,6 +12,7 @@ import dynamic from "next/dynamic";
 // import { toast } from "react-toastify";
 import Image from "next/image";
 import { Faqs } from "@/components/faq";
+import { rounded } from "@/utils/number";
 
 function BagScreen() {
   const router = useRouter();
@@ -29,6 +31,10 @@ function BagScreen() {
   const updateCartHandler = async (item, qty) => {
     const quantity = Number(qty);
     dispatch({ type: "CART_ADD_ITEM", payload: { ...item, quantity } });
+  };
+
+  const totalPrice = () => {
+    return cartItems.reduce((a, c) => a + c.quantity * c.price, 0) + 69;
   };
 
   return (
@@ -56,7 +62,7 @@ function BagScreen() {
                     alt="empty"
                     width={100}
                     height={100}
-                    // className="h-40 w-40 flex-none  bg-white object-cover object-center"
+                  // className="h-40 w-40 flex-none  bg-white object-cover object-center"
                   />
                   <div className="flex flex-col justify-between space-y-4 grow">
                     <div className="space-y-1 text-sm grow">
@@ -121,7 +127,20 @@ function BagScreen() {
                           </div>
 
                           <p>{item.description}</p>
-                          <p>{item.rating}</p>
+                          <div className="ml-1 flex items-center">
+                            {[0, 1, 2, 3, 4].map((rating) => (
+                              <FaStar
+                                key={rating}
+                                className={classNames(
+                                  item.rating > rating
+                                    ? "text-yellow-400"
+                                    : "text-gray-200",
+                                  "h-5 w-5 flex-shrink-0"
+                                )}
+                                aria-hidden="true"
+                              />
+                            ))}
+                          </div>
 
                           <p className="flex justify-end font-bold text-2xl text-gray-900">
                             ${item.price}
@@ -156,7 +175,10 @@ function BagScreen() {
           {/* Order summary */}
           <section
             aria-labelledby="summary-heading"
-            className="mt-16 bg-gray-100  px-4 py-6 sm:p-6 lg:mt-0 lg:p-8 rounded w-full md:w-1/3 "
+            className={classNames(
+              "mt-16 bg-gray-100  px-4 py-6 sm:p-6 lg:mt-0 lg:p-8 rounded w-full md:w-1/3",
+              !cartItems.length ? "hidden" : ""
+            )}
           >
             <div>
               <h2
@@ -172,7 +194,11 @@ function BagScreen() {
                     Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)})
                   </dt>
                   <dd className="text-sm font-medium text-gray-900">
-                    ${cartItems.reduce((a, c) => a + c.quantity * c.price, 0)}
+                    $
+                    {rounded(
+                      cartItems.reduce((a, c) => a + c.quantity * c.price, 0),
+                      2
+                    )}
                   </dd>
                 </div>
                 <div className="flex items-center justify-between border-t border-gray-200 pt-4">
@@ -195,8 +221,7 @@ function BagScreen() {
                 <dt className="text-xl font-semibold text-gray-900">Total</dt>
                 <dd className="text-xl font-semibold text-gray-900">
                   {" "}
-                  $
-                  {cartItems.reduce((a, c) => a + c.quantity * c.price, 0) + 69}
+                  ${totalPrice()}
                 </dd>
               </div>
               <button
@@ -205,15 +230,14 @@ function BagScreen() {
                 // onClick={() => router.push("login?redirect=/shipping")}
                 className="w-full  border border-transparent bg-indigo-500 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
               >
-                Checkout $
-                {cartItems.reduce((a, c) => a + c.quantity * c.price, 0) + 69}
+                Checkout ${totalPrice()}
               </button>
             </div>
           </section>
           <input
             type="hidden"
             name="meals"
-            // value={selectedProducts.join(",")}
+          // value={selectedProducts.join(",")}
           />
         </div>
       </div>
