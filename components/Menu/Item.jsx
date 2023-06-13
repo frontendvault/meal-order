@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import Modal from "./Modal";
 import { Store } from "../../utils/Store";
 import { FaStar } from "react-icons/fa";
+import { useCart } from "@/utils/providers/cart.provider";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -11,13 +12,18 @@ function classNames(...classes) {
 function MealItem({ meal }) {
   const [openModal, setOpenModal] = useState(false);
   const { state, dispatch } = useContext(Store);
-  const { cart } = state;
+  const { carts } = state;
+  const { cart, addCartItem } = useCart();
 
   const addToCartHandler = (meal) => {
-    const existItem = cart.cartItems.find((x) => x.slug === meal.slug);
-    const quantity = existItem ? existItem.quantity + 1 : 1;
+    // const existItem = carts.cartItems.find((x) => x.slug === meal.slug);
+    // const quantity = existItem ? existItem.quantity + 1 : 1;
 
-    dispatch({ type: "CART_ADD_ITEM", payload: { ...meal, quantity } });
+    // dispatch({ type: "CART_ADD_ITEM", payload: { ...meal, quantity } });
+  };
+
+  const handleAddToCart = (meal) => {
+    addCartItem(meal.id, 1);
   };
 
   return (
@@ -60,7 +66,10 @@ function MealItem({ meal }) {
         </div>
         <button
           className=" text-white m-2 py-1 px-3 bg-blue-400 hover:bg-blue-500 rounded"
-          onClick={() => addToCartHandler(meal)}
+          onClick={() => {
+            handleAddToCart(meal)
+            addToCartHandler(meal)
+            }}
         >
           ADD
         </button>
