@@ -1,15 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaStar, FaPlus, FaMinus } from "react-icons/fa";
 import data from "../../utils/data";
-
 import Features from "../../components/Menu/Features";
 import Testimonials from "../../components/Testimonials";
 import Layout from "../../components/Layout";
 import { Store } from "../../utils/Store";
 import { Faqs } from "@/components/faq";
+import { getMenuDetail } from "../menu/menu.api";
 
 export default function MealScreen() {
   // const { meal } = props;
@@ -18,17 +18,8 @@ export default function MealScreen() {
   const { query } = useRouter();
   const { slug } = query;
   const [quantity, setQuantity] = useState(1);
-  const meal = data.meals.find((x) => x.slug === slug);
-  if (!meal) {
-    return (
-      <Layout title="Meal not found">
-        <div className="flex justify-center mt-[700px] items-center text-red-400 font-bold">
-          Help me! Help me!! I am going to die of hunger because I cant find the
-          meal
-        </div>
-      </Layout>
-    );
-  }
+
+
 
   const addToCartHandler = async () => {
     const existItem = state.cart.cartItems.find((x) => x.slug === meal.slug);
@@ -41,8 +32,33 @@ export default function MealScreen() {
     router.push("/bag");
   };
 
+  const menuDetails = (id) => {
+    getMenuDetail(id).then(({data})=>{
+      console.log("data",data)
+    }).catch(({res})=>{
+
+    })
+  }
+
+  useEffect(() => {
+    menuDetails(slug)
+  },[slug])
+
+  const meal = data.meals.find((x) => x.slug === slug);
+
+  if (!meal) {
+    return (
+      <Layout title="Meal not found">
+        <div className="flex justify-center mt-[700px] items-center text-red-400 font-bold">
+          Help me! Help me!! I am going to die of hunger because I cant find the
+          meal
+        </div>
+      </Layout>
+    );
+  }
+
   return (
-    <Layout title={meal.name}>
+    <Layout title={"meal?.name"}>
       <div className="py-2  mx-auto">
         <div className="md:px-10 mt-10 container mx-auto">
           <Link href="/menu">Back to meals</Link>
@@ -51,7 +67,7 @@ export default function MealScreen() {
           <div className=" mr-8 md:w-[500]">
             <ul className="">
               <li>
-                <h1 className="text-2xl font-bold">{meal.name}</h1>
+                <h1 className="text-2xl font-bold">{"meal.name"}</h1>
               </li>
               {/* <li>Category: {meal.category}</li> */}
               <li className="flex items-center  gap-3 mb-4">

@@ -1,18 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import MealItem from "@/components/Menu/Item";
 import data from "@/utils/data";
 import { FaMapMarkerAlt, FaSearch } from "react-icons/fa";
 import Category from "@/components/Categories/Category";
+import { getMenu } from "./menu/menu.api";
 
 export default function Menu() {
   const categories = [
     "All",
     ...new Set(data.meals.map((item) => item.category)),
   ];
-  const [mealsInfo, setMealsInfo] = useState(data.meals);
+  const [mealsInfo, setMealsInfo] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
   const [search, setSearch] = useState("");
+
+  const getMenuList = () => {
+    getMenu().then(({data})=>{
+      setMealsInfo(data.results)
+    })
+  }
+
+  useEffect(()=>{
+    getMenuList()
+  },[])
 
   return (
     <Layout title="MPO Menu">
@@ -56,8 +67,8 @@ export default function Menu() {
                       (!activeCategory || activeCategory === meal.category) &&
                       meal.name.includes(search)
                   )
-                  .map((meal) => (
-                    <MealItem meal={meal} key={meal.slug} />
+                  .map((meal,index) => (
+                    <MealItem meal={meal} key={index} />
                   ))}
               </ul>
             </div>

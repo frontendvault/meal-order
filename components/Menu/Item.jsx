@@ -23,11 +23,11 @@ function MealItem({ meal }) {
   return (
     <div className="relative card mb-10 md:mb-0 ">
       <p className="absolute bg-red-500  px-2 text-white text-sm font-semibold right-2 rounded">
-        {meal.category}
+        {meal.type}
       </p>
 
-      <Link href={`/meal/${meal.slug}`}>
-        <img src={meal.imageUrl} alt={meal.name} />
+      <Link href={`/meal/${meal.id}`}>
+        <img src={meal.image} alt={meal.name} style={{ height: '200px' }}/>
       </Link>
 
       <div className="px-2" onClick={() => setOpenModal(true)}>
@@ -43,7 +43,7 @@ function MealItem({ meal }) {
       <div className="flex flex-col px-2">
         <div className="flex justify-between">
           <h2 className="text-sm mb-1 text-lg font-bold text-gray-800">
-            ${meal.price}
+            ${meal.price || '--'}
           </h2>
           <div className="ml-1 flex items-center">
             {[0, 1, 2, 3, 4].map((rating) => (
