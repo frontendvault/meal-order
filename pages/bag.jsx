@@ -12,7 +12,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Faqs } from "@/components/faq";
 import { useCart } from "@/utils/providers/cart.provider";
-import { getMenu } from "./menu/menu.api";
+import { getMenu } from "./API_List/menu.api";
 
 function BagScreen() {
   const router = useRouter();
@@ -36,17 +36,6 @@ function BagScreen() {
     getMenuList()
   },[])
 
-  const removeMealHandler = (item) => {
-    dispatch({ type: "CART_REMOVE_ITEM", payload: item });
-  };
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-  }
-  const updateCartHandler = async (item, qty) => {
-    const quantity = Number(qty);
-    dispatch({ type: "CART_ADD_ITEM", payload: { ...item, quantity } });
-  };
-
   const CartList = mealsInfo.filter(item => cart.some(c => c.id === item.id)).map(item => {
     const { quantity } = cart.find(c => c.id === item.id) || { quantity: 0 };
     return {
@@ -54,8 +43,6 @@ function BagScreen() {
       ...item 
     };
   }) || [];
-
-  console.log("cart list",CartList)
 
   return (
     <Layout title="MPO - Shopping Bag">
@@ -136,12 +123,12 @@ function BagScreen() {
                             <select
                               value={item?.quantity}
                               onChange={(e) =>
-                                addCartItem(item.id, e.target.value)
+                                addCartItem(item.id, e.target.value*1)
                               }
                               className="max-w-full border border-gray-300 py-1.5 px-2 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                             >
                               {[...Array(item?.quantity).keys()].map((x) => (
-                                <option>{x + 1}</option>
+                                <option>{(x*1) + 1}</option>
                               ))}
                             </select>
                           </div>

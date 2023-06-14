@@ -68,7 +68,6 @@ function MealItem({ meal }) {
           className=" text-white m-2 py-1 px-3 bg-blue-400 hover:bg-blue-500 rounded"
           onClick={() => {
             handleAddToCart(meal)
-            addToCartHandler(meal)
             }}
         >
           ADD
