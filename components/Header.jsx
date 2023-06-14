@@ -64,7 +64,7 @@ const Header = () => {
             </Link>
           ))}
 
-          <Link href="/signup">
+          <Link href="/auth/sign-up">
             <button className="text-blue-600 font-bold">My Account</button>
           </Link>
           <button className="py-2 px-5 bg-blue-600 rounded text-white font-bold">
@@ -102,45 +102,7 @@ const Header = () => {
               FAQ
             </Link>
 
-            {/* {status === "loading" ? (
-              "Loading"
-            ) : session?.user ? (
-              <Menu as="div" className="relative inline-block  ">
-                <Menu.Button>{session.user.name}</Menu.Button>
-                <Menu.Items className="absolute right-0 w-56 origin-top-right shadow-lg bg-white">
-                  <Menu.Item>
-                    <DropdownLink className="dropdown-link" href="/profile">
-                      Profile
-                    </DropdownLink>
-                  </Menu.Item>
-                  <Menu.Item>
-                    <DropdownLink
-                      className="dropdown-link"
-                      href="/order-history"
-                    >
-                      Order History
-                    </DropdownLink>
-                  </Menu.Item>
-                  <Menu.Item>
-                    <a
-                      className="dropdown-link"
-                      href="#"
-                      onClick={logoutClickHandler}
-                    >
-                      Logout
-                    </a>
-                  </Menu.Item>
-                </Menu.Items>
-              </Menu>
-            ) : (
-              <Link href="/login">
-                <a className="border-b border-blue-300 w-full text-center py-2">
-                  My Account
-                </a>
-              </Link>
-            )} */}
-
-            <Link href="/signup">
+            <Link href="/auth/sign-up">
               <button className="text-blue-600 font-bold">My Account</button>
             </Link>
             <Link

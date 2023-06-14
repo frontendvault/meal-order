@@ -147,7 +147,7 @@ function signup() {
                   <div className="text-sm  ">
                     Already have an account?&nbsp;
                     <span className="text-blue-700 font-medium">
-                      <Link href="/login">Click here to Login</Link>
+                      <Link href="/auth/login">Click here to Login</Link>
                     </span>
                   </div>
                   <div>

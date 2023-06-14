@@ -8,6 +8,7 @@ import TextField from "@/components/input/TextField";
 import client from "@/utils/client";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 const validationSchema = yup.object({
   email: yup.string().email().required(),
@@ -114,9 +115,7 @@ function LoginScreen() {
                     Don't have an account?&nbsp;
                     <span className="text-blue-700 font-medium">
                       {" "}
-                      {/* <Link href={`/signup?redirect=${redirect || "/menu"}`}>
-                        Click here to Signup
-                      </Link> */}
+                      <Link href={`/auth/sign-up`}>Click here to Signup</Link>
                     </span>
                   </div>
                   <div>
