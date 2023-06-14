@@ -11,7 +11,7 @@ const menuItems = [
     url: "/menu",
   },
   {
-    name: "Our Bag",
+    name: "My Bag",
     url: "/bag",
   },
   {
@@ -56,9 +56,9 @@ const Header = () => {
           {menuItems.map((item) => (
             <Link href={item.url} className="relative ">
               {item.name}
-              {item.url === "/bag" && cart.length > 0 && (
-                <span className="absolute -top-1 -right-4 ml-1 rounded-lg bg-red-600 px-2 text-xs font-bold text-white">
-                  {cart.length}
+              {item.url === "/bag" && cart.cartItems.length > 0 && (
+                <span className="absolute -top-2 -right-4 ml-1 rounded-lg bg-red-600 px-2 text-xs font-bold text-white">
+                  {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
                 </span>
               )}
             </Link>
@@ -94,7 +94,7 @@ const Header = () => {
               My Bag
               {cartItemsCount > 0 && (
                 <span className="absolute -top-1 -right-4 ml-1 rounded-lg bg-red-600 px-2 text-xs font-bold text-white">
-                  {cartItemsCount}12
+                  {cartItemsCount}
                 </span>
               )}
             </Link>

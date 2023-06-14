@@ -19,11 +19,71 @@ export default function MealScreen() {
   const { slug } = query;
   const [quantity, setQuantity] = useState(1);
 
+  const renderMealTag = () => {
+    return (
+      <ul className="flex gap-2">
+        {meal.tags.map((tag) => (
+          <li
+            className="bg-[#BFDBFE] rounded p-2 uppercase font-medium text-xs"
+            key={tag}
+          >
+            {tag.name}
+          </li>
+        ))}
+      </ul>
+    );
+  };
 
+  const renderNutrients = () => {
+    return (
+      <div className="border mt-4">
+        <div className="flex items-center gap-2 bg-slate-100 p-4">
+          <div className="font-bold">Nutrition Facts</div>
+          <div className="text-gray-600">(%) - percentage of daily value</div>
+        </div>
+        <div className="p-4">
+          {meal.nutrients.map((nutrient) => (
+            <div class="flex items-center gap-4 mb-1">
+              <div className="uppercase text-sm font-medium">
+                {nutrient.name}
+              </div>
+              <div className="bg-gray-200 h-[1px] flex-grow-[1]"></div>
+              <div className="flex gap-1 text-sm font-normal">
+                <span>{`${nutrient.value}${nutrient.unit ?? ""}`}</span>
+                <span>
+                  {`${
+                    nutrient.subValue
+                      ? `(${nutrient.subValue}${nutrient.subUnit ?? ""})`
+                      : ""
+                  }`}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const renderIngredient = () => {
+    return (
+      <div className="border mt-4  min-w-[600px]">
+        <div className="flex items-center gap-2 bg-slate-100 p-4">
+          <div className="font-bold">All Ingredients</div>
+        </div>
+        <div className="flex overflow-auto flex-col md:flex-row">
+          {meal.ingredients.map((ingredient) => (
+            <div className="flex flex-col items-center border w-full py-4">
+              <img src={ingredient.image} />
+              <p>{ingredient.name}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   const addToCartHandler = async () => {
-    const existItem = state.cart.cartItems.find((x) => x.slug === meal.slug);
-    const quantity = existItem ? existItem.quantity + 1 : 1;
     // const { data } = await axios.get(`/api/meals/${meal._id}`);
     // if (data.countInStock < quantity) {
     //   return toast.error("Sorry. Meal is out of stock");
@@ -33,16 +93,16 @@ export default function MealScreen() {
   };
 
   const menuDetails = (id) => {
-    getMenuDetail(id).then(({data})=>{
-      console.log("data",data)
-    }).catch(({res})=>{
-
-    })
-  }
+    getMenuDetail(id)
+      .then(({ data }) => {
+        console.log("data", data);
+      })
+      .catch(({ res }) => {});
+  };
 
   useEffect(() => {
-    menuDetails(slug)
-  },[slug])
+    menuDetails(slug);
+  }, [slug]);
 
   const meal = data.meals.find((x) => x.slug === slug);
 
@@ -67,7 +127,8 @@ export default function MealScreen() {
           <div className=" mr-8 md:w-[500]">
             <ul className="">
               <li>
-                <h1 className="text-2xl font-bold">{"meal.name"}</h1>
+                <div className="mb-2">{renderMealTag()}</div>
+                <h1 className="text-2xl font-bold">{meal.name}</h1>
               </li>
               {/* <li>Category: {meal.category}</li> */}
               <li className="flex items-center  gap-3 mb-4">
@@ -89,7 +150,7 @@ export default function MealScreen() {
                     className="h-6 w-8 border-r p-1 text-black cursor-pointer font-bold"
                     onClick={(e) => setQuantity(quantity - 1)}
                   />
-                  <p className="text-xl font-bold mx-1 ">0{quantity}</p>
+                  <p className="text-xl font-bold mx-1 ">{quantity}</p>
                   <FaPlus
                     className="h-6 w-8 border-l p-1 text-black cursor-pointer font-bold"
                     onClick={(e) => setQuantity(quantity + 1)}
@@ -111,6 +172,7 @@ export default function MealScreen() {
                 </button>
               </li>
             </ul>
+            <div id="nutrient">{renderNutrients()}</div>
           </div>
           <div className="flex md:w-[500px] flex-col">
             <div className="md:w-[500px]">
@@ -144,6 +206,9 @@ export default function MealScreen() {
           </div>
         </div>
         <div className="md:mt-20">
+          <div className="mx-auto max-w-xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+            {renderIngredient()}
+          </div>
           <Features />
           <Testimonials />
           <Faqs />

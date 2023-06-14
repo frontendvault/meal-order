@@ -28,6 +28,97 @@ const data = {
       rating: 4,
       review: 22,
       countInStock: 5,
+      ingredients: [
+        {
+          name: 'Bacon',
+          image: 'https://functionflo-cdn.azureedge.net/prd-a14b15f04c74493192bdbaed6f00ddd1/03a46dca-f1ea-4839-a825-f0568dc3bcda.png?updatedV2=2021-04-07_15-21-32',
+        },
+        {
+          name: 'Cheeseburger Crumble',
+          image: 'https://functionflo-cdn.azureedge.net/prd-a14b15f04c74493192bdbaed6f00ddd1/15cd3266-9f3f-433b-f374-08dac36ebb41.png?updatedV2=2022-11-10_22-55-58',
+        },
+        {
+          name: 'Cavatappi Pasta',
+          image: 'https://functionflo-cdn.azureedge.net/prd-a14b15f04c74493192bdbaed6f00ddd1/794734b2-8c12-4e63-f5b0-08da95bde22d.png?updatedV2=2022-09-13_19-26-40'
+        },
+        {
+          name: 'Cheese Sauce',
+          image: 'https://functionflo-cdn.azureedge.net/prd-a14b15f04c74493192bdbaed6f00ddd1/38b8e568-4d27-4727-5bdf-08dac36e7978.png?updatedV2=2022-11-10_22-54-08'
+        },
+        {
+          name: 'Tomato & Dill',
+          image: 'https://functionflo-cdn.azureedge.net/prd-a14b15f04c74493192bdbaed6f00ddd1/b468c023-2444-4741-3678-08dac3711acf.png?updatedV2=2022-11-10_23-12-57',
+        }
+      ],
+      tags: [
+        {
+          name: "new",
+          order: 1
+        },
+        {
+          name: "No Eggs",
+          order: 2
+        },
+        {
+          name: "No Fish",
+          order: 3
+        },
+        {
+          name: "No Tree Nuts",
+          order: 4
+        }
+      ],
+      nutrients: [
+        {
+          name: "Protein",
+          value: 20,
+          unit: "g",
+          subValue: 1.5,
+          subUnit: "oz"
+        },
+        {
+          name: "Serving Size",
+          value: 10,
+          unit: "oz",
+          subValue: 283,
+          subUnit: "g"
+        },
+        {
+          name: "1 Serving Per Container",
+          value: "Per Serving",
+          unit: "",
+        },
+        {
+          name: "Calories",
+          value: 590,
+        },
+        {
+          name: "Total Fat",
+          value: 32,
+          unit: "g",
+          subValue: 41,
+          subUnit: "%"
+        },
+        {
+          name: "Saturated Fat",
+          value: 13,
+          unit: "g",
+          subValue: 65,
+          subUnit: "%"
+        },
+        {
+          name: "Trans Fat",
+          value: 0,
+          unit: "g",
+        },
+        {
+          name: "Cholesterol",
+          value: 85,
+          unit: "mg",
+          subValue: 28,
+          subUnit: "%"
+        },
+      ]
     },
     {
       name: "Chicken Carne Asada Plate  double line title",
