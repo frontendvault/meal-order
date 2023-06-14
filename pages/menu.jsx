@@ -4,7 +4,7 @@ import MealItem from "@/components/Menu/Item";
 import data from "@/utils/data";
 import { FaMapMarkerAlt, FaSearch } from "react-icons/fa";
 import Category from "@/components/Categories/Category";
-import { getMenu } from "./menu/menu.api";
+import { getMenu } from "../services/menu/menu.api";
 
 export default function Menu() {
   const categories = [
