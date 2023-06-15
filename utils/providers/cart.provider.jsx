@@ -9,16 +9,16 @@ function CartProvider({ children }) {
 
     const cartCookie = Cookies.get("cart");
 
-    const addCartItem = (id, quantity) => {
+    const addCartItem = (item, quantity) => {
 
         setCart((prevCartItems) => {
-            const existingItem = prevCartItems.find((item) => item.id === id);
+            const existingItem = prevCartItems.find((prevItem) => prevItem.id === item.id);
             if (existingItem) {
-                return prevCartItems.map((item) =>
-                    item.id === id ? quantity === 0 ? removeItem(id) : { ...item, quantity: item.quantity + quantity } : item
+                return prevCartItems.map((prevItem) =>
+                    prevItem.id === item.id ? quantity === 0 ? removeItem(item.id) : { ...prevItem, quantity: prevItem.quantity + quantity } : prevItem
                 );
             } else {
-                return [...prevCartItems, { id, quantity }];
+                return [...prevCartItems, { ...item, quantity }];
             }
         });
     };

@@ -15,31 +15,6 @@ import { getMenu } from "../services/menu.api";
 
 function BagScreen() {
   const { cart, addCartItem, removeItem } = useCart();
-  const [mealsInfo, setMealsInfo] = useState([]);
-
-  const getMenuList = () => {
-    getMenu().then(({ data }) => {
-      setMealsInfo(data.results);
-    });
-  };
-
-  useEffect(() => {
-    getMenuList();
-  }, []);
-
-  const CartList =
-    mealsInfo
-      .filter((item) => cart.some((c) => c.id === item.id))
-      .map((item) => {
-        const { quantity } = cart.find((c) => c.id === item.id) || {
-          quantity: 0,
-        };
-        return {
-          quantity,
-          ...item,
-        };
-      }) || [];
-
   const totalPrice = () => {
     return cart.reduce((a, c) => a + c.quantity * c.price, 0) + 69;
   };
@@ -100,16 +75,14 @@ function BagScreen() {
                   role="list"
                   className="flex-auto divide-y divide-gray-200 overflow-y-auto md:px-6 md:pl-0 md:mr-10"
                 >
-                  {CartList.map((item) => (
+                  {cart.map((item) => (
                     <li key={item.id} className="flex space-x-6 py-6">
-                      <Link href={`/menu/${item.id}`}>
-                        {/* <Image
-                          src={item?.image}
-                          alt={item?.name}
-                          height={50}
-                          width={50}
-                        /> */}
-                      </Link>
+                      <Image
+                        src={item?.image}
+                        alt={item?.name}
+                        height={100}
+                        width={100}
+                      />
 
                       <div className="flex flex-col justify-between space-y-4 grow">
                         <div className="space-y-1 text-sm grow">
@@ -123,7 +96,7 @@ function BagScreen() {
                             <select
                               value={item?.quantity}
                               onChange={(e) =>
-                                addCartItem(item.id, e.target.value * 1)
+                                addCartItem(item, e.target.value * 1)
                               }
                               className="max-w-full border border-gray-300 py-1.5 px-2 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                             >
@@ -184,14 +157,14 @@ function BagScreen() {
               <dl className="mt-6 space-y-2">
                 <div className="flex items-center justify-between">
                   <dt className="text-sm text-gray-600">
-                    {/* Subtotal ({cart.reduce((a, c) => a + c.quantity, 0)}) */}
+                    Subtotal ({cart.reduce((a, c) => a + c.quantity, 0)})
                   </dt>
                   <dd className="text-sm font-medium text-gray-900">
                     $
-                    {/* {rounded(
+                    {Math.round(
                       cart.reduce((a, c) => a + c.quantity * c.price, 0),
                       2
-                    )} */}
+                    )}
                   </dd>
                 </div>
                 <div className="flex items-center justify-between border-t border-gray-200 pt-4">
