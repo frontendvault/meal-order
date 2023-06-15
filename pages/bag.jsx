@@ -4,8 +4,6 @@ import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import Testimonials from "../components/Testimonials";
-import { FaStar } from "react-icons/fa";
-import { Store } from "../utils/Store";
 
 import dynamic from "next/dynamic";
 // import axios from "axios";
@@ -14,18 +12,9 @@ import Image from "next/image";
 import { Faqs } from "@/components/faq";
 import { useCart } from "@/utils/providers/cart.provider";
 import { getMenu } from "../services/menu.api";
-import { rounded } from "@/utils/number";
 
 function BagScreen() {
-  const router = useRouter();
-  const { state, dispatch } = useContext(Store);
-  // const [quantity, setQuantity] = useState(1);
-  const {
-    cart: { cartItems },
-  } = state;
-
   const { cart, addCartItem, removeItem } = useCart();
-
   const [mealsInfo, setMealsInfo] = useState([]);
 
   const getMenuList = () => {
@@ -52,7 +41,7 @@ function BagScreen() {
       }) || [];
 
   const totalPrice = () => {
-    return cartItems.reduce((a, c) => a + c.quantity * c.price, 0) + 69;
+    return cart.reduce((a, c) => a + c.quantity * c.price, 0) + 69;
   };
 
   return (
@@ -144,21 +133,8 @@ function BagScreen() {
                             </select>
                           </div>
 
-                          <p>{item.description}</p>
-                          <div className="ml-1 flex items-center">
-                            {[0, 1, 2, 3, 4].map((rating) => (
-                              <FaStar
-                                key={rating}
-                                className={classNames(
-                                  item.rating > rating
-                                    ? "text-yellow-400"
-                                    : "text-gray-200",
-                                  "h-5 w-5 flex-shrink-0"
-                                )}
-                                aria-hidden="true"
-                              />
-                            ))}
-                          </div>
+                          <p>{item?.description}</p>
+                          <p>{item?.rating}</p>
 
                           <p className="flex justify-end font-bold text-2xl text-gray-900">
                             ${item?.price}
@@ -193,10 +169,9 @@ function BagScreen() {
           {/* Order summary */}
           <section
             aria-labelledby="summary-heading"
-            className={classNames(
-              "mt-16 bg-gray-100  px-4 py-6 sm:p-6 lg:mt-0 lg:p-8 rounded w-full md:w-1/3",
-              !cartItems.length ? "hidden" : ""
-            )}
+            className={`mt-16 bg-gray-100  px-4 py-6 sm:p-6 lg:mt-0 lg:p-8 rounded w-full md:w-1/3 ${
+              !cart.length ? "hidden" : ""
+            }`}
           >
             <div>
               <h2
@@ -209,14 +184,14 @@ function BagScreen() {
               <dl className="mt-6 space-y-2">
                 <div className="flex items-center justify-between">
                   <dt className="text-sm text-gray-600">
-                    Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)})
+                    {/* Subtotal ({cart.reduce((a, c) => a + c.quantity, 0)}) */}
                   </dt>
                   <dd className="text-sm font-medium text-gray-900">
                     $
-                    {rounded(
-                      cartItems.reduce((a, c) => a + c.quantity * c.price, 0),
+                    {/* {rounded(
+                      cart.reduce((a, c) => a + c.quantity * c.price, 0),
                       2
-                    )}
+                    )} */}
                   </dd>
                 </div>
                 <div className="flex items-center justify-between border-t border-gray-200 pt-4">

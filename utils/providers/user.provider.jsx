@@ -1,15 +1,17 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import client from "../client";
+import client, { AuthClient } from "../client";
 
 const UserContext = createContext({});
 
-function UserProvider({ children }) {
+function UserProvider({ children, guest }) {
   const [user, setUser] = useState(null);
   const [userChecked, setUserChecked] = useState(false);
 
   const updateUser = () => {
-    client
-      .get("/v1/user/me")
+    if (guest) return;
+
+    AuthClient()
+      .get("/v1/auth/profile")
       .then(({ data }) => {
         setUser(data);
         setUserChecked(true);
@@ -23,7 +25,9 @@ function UserProvider({ children }) {
     updateUser();
   }, []);
 
-  return (
+  return guest ? (
+    children
+  ) : (
     <UserContext.Provider value={{ updateUser, user }}>
       {userChecked && children}
     </UserContext.Provider>

@@ -6,11 +6,12 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function App({ Component, pageProps }) {
+  const guest = Component.guest
 
   return (
     <StoreProvider>
-      <ToastContainer/>
-      <UserProvider>
+      <ToastContainer />
+      <UserProvider guest={guest}>
         <CartProvider>
           <Component {...pageProps} />
         </CartProvider>

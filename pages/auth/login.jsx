@@ -200,5 +200,6 @@ function LoginScreen() {
     </>
   );
 }
+LoginScreen.guest = true;
 
 export default LoginScreen;
