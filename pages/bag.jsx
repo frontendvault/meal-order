@@ -1,7 +1,7 @@
 // import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import Testimonials from "../components/Testimonials";
 import { FaStar } from "react-icons/fa";
@@ -13,28 +13,38 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Faqs } from "@/components/faq";
 import { rounded } from "@/utils/number";
+import { useCart } from "@/utils/providers/cart.provider";
+import { getMenu } from "./API_List/menu.api";
 
 function BagScreen() {
-  const router = useRouter();
-  const { state, dispatch } = useContext(Store);
-  // const [quantity, setQuantity] = useState(1);
-  const {
-    cart: { cartItems },
-  } = state;
+  const { cart, addCartItem, removeItem } = useCart();
+  const [mealsInfo, setMealsInfo] = useState([]);
 
-  const removeMealHandler = (item) => {
-    dispatch({ type: "CART_REMOVE_ITEM", payload: item });
+  const getMenuList = () => {
+    getMenu().then(({ data }) => {
+      setMealsInfo(data.results);
+    });
   };
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-  }
-  const updateCartHandler = async (item, qty) => {
-    const quantity = Number(qty);
-    dispatch({ type: "CART_ADD_ITEM", payload: { ...item, quantity } });
-  };
+
+  useEffect(() => {
+    getMenuList();
+  }, []);
+
+  const CartList =
+    mealsInfo
+      .filter((item) => cart.some((c) => c.id === item.id))
+      .map((item) => {
+        const { quantity } = cart.find((c) => c.id === item.id) || {
+          quantity: 0,
+        };
+        return {
+          quantity,
+          ...item,
+        };
+      }) || [];
 
   const totalPrice = () => {
-    return cartItems.reduce((a, c) => a + c.quantity * c.price, 0) + 69;
+    return cart.reduce((a, c) => a + c.quantity * c.price, 0) + 69;
   };
 
   return (
@@ -53,7 +63,7 @@ function BagScreen() {
           className="mt-1 md:mt-12 flex items-start flex-col md:flex-row"
         >
           <section aria-labelledby="cart-heading" className="md:w-2/3">
-            {cartItems.length === 0 ? (
+            {cart.length === 0 ? (
               <div>
                 {/* <Link href="/menu">Go to Menu</Link> */}
                 <li className="flex  mt-15 md:mt-32 py-6 items-center justify-center">
@@ -62,7 +72,7 @@ function BagScreen() {
                     alt="empty"
                     width={100}
                     height={100}
-                  // className="h-40 w-40 flex-none  bg-white object-cover object-center"
+                    // className="h-40 w-40 flex-none  bg-white object-cover object-center"
                   />
                   <div className="flex flex-col justify-between space-y-4 grow">
                     <div className="space-y-1 text-sm grow">
@@ -93,15 +103,15 @@ function BagScreen() {
                   role="list"
                   className="flex-auto divide-y divide-gray-200 overflow-y-auto md:px-6 md:pl-0 md:mr-10"
                 >
-                  {cartItems.map((item) => (
-                    <li key={item.slug} className="flex space-x-6 py-6">
-                      <Link href={`/menu/${item.slug}`}>
-                        <Image
-                          src={item.imageUrl}
-                          alt={item.name}
+                  {CartList.map((item) => (
+                    <li key={item.id} className="flex space-x-6 py-6">
+                      <Link href={`/menu/${item.id}`}>
+                        {/* <Image
+                          src={item?.image}
+                          alt={item?.name}
                           height={50}
                           width={50}
-                        />
+                        /> */}
                       </Link>
 
                       <div className="flex flex-col justify-between space-y-4 grow">
@@ -109,41 +119,28 @@ function BagScreen() {
                           <div className="flex items-center justify-between grow">
                             <div>
                               <h3 className="text-gray-900 text-lg font-semibold">
-                                {item.name}
+                                {item?.name}
                               </h3>
                             </div>
                             {/* <p className="mr-3">{item.quantity}</p> */}
                             <select
-                              value={item.quantity}
+                              value={item?.quantity}
                               onChange={(e) =>
-                                updateCartHandler(item, e.target.value)
+                                addCartItem(item.id, e.target.value * 1)
                               }
                               className="max-w-full border border-gray-300 py-1.5 px-2 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                             >
-                              {[...Array(item.countInStock).keys()].map((x) => (
-                                <option>{x + 1}</option>
+                              {[...Array(item?.quantity).keys()].map((x) => (
+                                <option>{x * 1 + 1}</option>
                               ))}
                             </select>
                           </div>
 
-                          <p>{item.description}</p>
-                          <div className="ml-1 flex items-center">
-                            {[0, 1, 2, 3, 4].map((rating) => (
-                              <FaStar
-                                key={rating}
-                                className={classNames(
-                                  item.rating > rating
-                                    ? "text-yellow-400"
-                                    : "text-gray-200",
-                                  "h-5 w-5 flex-shrink-0"
-                                )}
-                                aria-hidden="true"
-                              />
-                            ))}
-                          </div>
+                          <p>{item?.description}</p>
+                          <p>{item?.rating}</p>
 
                           <p className="flex justify-end font-bold text-2xl text-gray-900">
-                            ${item.price}
+                            ${item?.price}
                           </p>
                         </div>
 
@@ -156,7 +153,7 @@ function BagScreen() {
                           </button>
                           <div className="flex border-l border-gray-300 pl-4">
                             <button
-                              onClick={() => removeMealHandler(item)}
+                              onClick={() => removeItem(item.id)}
                               type="button"
                               className="text-sm font-medium text-red-600 hover:text-red-400 underline"
                             >
@@ -175,10 +172,9 @@ function BagScreen() {
           {/* Order summary */}
           <section
             aria-labelledby="summary-heading"
-            className={classNames(
-              "mt-16 bg-gray-100  px-4 py-6 sm:p-6 lg:mt-0 lg:p-8 rounded w-full md:w-1/3",
-              !cartItems.length ? "hidden" : ""
-            )}
+            className={`mt-16 bg-gray-100  px-4 py-6 sm:p-6 lg:mt-0 lg:p-8 rounded w-full md:w-1/3 ${
+              !cart.length ? "hidden" : ""
+            }`}
           >
             <div>
               <h2
@@ -191,14 +187,14 @@ function BagScreen() {
               <dl className="mt-6 space-y-2">
                 <div className="flex items-center justify-between">
                   <dt className="text-sm text-gray-600">
-                    Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)})
+                    {/* Subtotal ({cart.reduce((a, c) => a + c.quantity, 0)}) */}
                   </dt>
                   <dd className="text-sm font-medium text-gray-900">
                     $
-                    {rounded(
-                      cartItems.reduce((a, c) => a + c.quantity * c.price, 0),
+                    {/* {rounded(
+                      cart.reduce((a, c) => a + c.quantity * c.price, 0),
                       2
-                    )}
+                    )} */}
                   </dd>
                 </div>
                 <div className="flex items-center justify-between border-t border-gray-200 pt-4">
@@ -237,7 +233,7 @@ function BagScreen() {
           <input
             type="hidden"
             name="meals"
-          // value={selectedProducts.join(",")}
+            // value={selectedProducts.join(",")}
           />
         </div>
       </div>

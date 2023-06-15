@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Store } from "../utils/Store";
 import { FaBars, FaRegWindowClose } from "react-icons/fa";
 import Image from "next/image";
+import { useCart } from "@/utils/providers/cart.provider";
 
 const menuItems = [
   {
@@ -20,14 +21,12 @@ const menuItems = [
 ];
 
 const Header = () => {
-  const { state, dispatch } = useContext(Store);
-  const { cart } = state;
-  const [cartItemsCount, setCartItemsCount] = useState(0);
+  const { cart } = useCart();
   const [menu, setMenu] = useState(false);
 
   useEffect(() => {
-    setCartItemsCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0));
-  }, [cart.cartItems]);
+    // setCartItemsCount(carts.cartItems.reduce((a, c) => a + c.quantity, 0));
+  }, [cart]);
 
   const logoutClickHandler = () => {
     Cookies.remove("cart");
@@ -54,9 +53,9 @@ const Header = () => {
           {menuItems.map((item) => (
             <Link href={item.url} className="relative ">
               {item.name}
-              {item.url === "/bag" && cart.cartItems.length > 0 && (
-                <span className="absolute -top-2 -right-4 ml-1 rounded-lg bg-red-600 px-2 text-xs font-bold text-white">
-                  {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
+              {item.url === "/bag" && cart.length > 0 && (
+                <span className="absolute -top-1 -right-4 ml-1 rounded-lg bg-red-600 px-2 text-xs font-bold text-white">
+                  {cart.length}
                 </span>
               )}
             </Link>
