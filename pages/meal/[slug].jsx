@@ -9,7 +9,7 @@ import Testimonials from "../../components/Testimonials";
 import Layout from "../../components/Layout";
 import { Store } from "../../utils/Store";
 import { Faqs } from "@/components/faq";
-import { getMenuDetail } from "../menu/menu.api";
+import { getMenuDetail } from "../../services/menu/menu.api";
 
 export default function MealScreen() {
   // const { meal } = props;
