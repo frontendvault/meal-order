@@ -8,6 +8,8 @@ function UserProvider({ children, guest }) {
   const [userChecked, setUserChecked] = useState(false);
 
   const updateUser = () => {
+    if (guest) return;
+
     AuthClient()
       .get("/v1/auth/profile")
       .then(({ data }) => {
@@ -24,7 +26,7 @@ function UserProvider({ children, guest }) {
   }, []);
 
   return guest ? (
-    { children }
+    children
   ) : (
     <UserContext.Provider value={{ updateUser, user }}>
       {userChecked && children}
