@@ -13,7 +13,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Faqs } from "@/components/faq";
 import { useCart } from "@/utils/providers/cart.provider";
-import { getMenu } from "./API_List/menu.api";
+import { getMenu } from "../services/menu.api";
 import { rounded } from "@/utils/number";
 
 function BagScreen() {

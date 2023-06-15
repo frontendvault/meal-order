@@ -3,8 +3,7 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
-import { getError } from "../utils/error";
+// import { signIn } from "next-auth/react";
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
 
@@ -99,7 +98,7 @@ function ResetPasswordScreen() {
         toast.error(result.error);
       }
     } catch (err) {
-      toast.error(getError(err));
+      // toast.error(getError(err));
     }
   };
 

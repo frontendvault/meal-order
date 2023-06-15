@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckCircleIcon } from "@heroicons/react/24/solid";
+// import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 
 const PasswordConfirm = () => {
@@ -23,7 +23,7 @@ const PasswordConfirm = () => {
             <h2 className="font-bold text-xl p-5 lg:m-5 m-0 text-center">
               You're all set. Time to pack your plate!
             </h2>
-            <CheckCircleIcon className="text-green-600 h-12 w-12" />
+            {/* <CheckCircleIcon className="text-green-600 h-12 w-12" /> */}
             <h3 className="m-3 font-bold">Reset Succesful</h3>
             <p className="lg:px-48 px-0 text-center">
               Make sure not to share your password to your MPO account with

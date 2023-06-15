@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import TextField from "@/components/input/TextField";
-import { placeOrder } from './API_List/order.api'
+import { placeOrder } from "../services/order.api";
 import { useCart } from "@/utils/providers/cart.provider";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
@@ -24,9 +24,9 @@ export default function ShippingScreen() {
 
   const formik = useFormik({
     initialValues: {
-      fullName: '',
-      deliveryAddress: '',
-      postalCode: '',
+      fullName: "",
+      deliveryAddress: "",
+      postalCode: "",
     },
     validationSchema,
     onSubmit: (values) => {
@@ -34,11 +34,11 @@ export default function ShippingScreen() {
       placeOrder(cart)
         .then(({ data }) => {
           //router push to the other page
-          toast.success("Order Placed")
+          toast.success("Order Placed");
           formik.setSubmitting(false);
         })
         .catch((res) => {
-          toast.error("Something went Wrong!")
+          toast.error("Something went Wrong!");
           formik.setSubmitting(false);
         });
     },
@@ -46,14 +46,13 @@ export default function ShippingScreen() {
 
   useEffect(() => {
     if (shipmentAddressCookie) {
-      const detail = JSON.parse(shipmentAddressCookie)
+      const detail = JSON.parse(shipmentAddressCookie);
       formik.setValues({
         fullName: detail.fullName,
         deliveryAddress: detail.deliveryAddress,
         postalCode: detail.postalCode,
       });
-  console.log("cart",detail,shipmentAddressCookie)
-      
+      console.log("cart", detail, shipmentAddressCookie);
     }
   }, []);
 
@@ -81,7 +80,9 @@ export default function ShippingScreen() {
             label="Delivery Address"
             placeholder="Delivery Address"
             {...formik.getFieldProps("deliveryAddress")}
-            error={formik.touched.deliveryAddress && formik.errors.deliveryAddress}
+            error={
+              formik.touched.deliveryAddress && formik.errors.deliveryAddress
+            }
           />
         </div>
 
@@ -101,8 +102,9 @@ export default function ShippingScreen() {
           <button
             disabled={formik.isSubmitting}
             type="submit"
-            className="w-full  border border-transparent bg-blue-600 py-1 px-4 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50">
-            {formik.isSubmitting ? "proceeding... " : 'Proceed to Payment'}
+            className="w-full  border border-transparent bg-blue-600 py-1 px-4 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+          >
+            {formik.isSubmitting ? "proceeding... " : "Proceed to Payment"}
           </button>
         </div>
       </form>

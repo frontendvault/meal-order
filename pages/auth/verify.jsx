@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckCircleIcon } from "@heroicons/react/24/solid";
+// import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 
 const AccountVerification = () => {
@@ -23,7 +23,7 @@ const AccountVerification = () => {
             <h2 className="font-bold text-xl p-5 lg:m-5 m-0">
               You're almost there
             </h2>
-            <CheckCircleIcon className="text-blue-700 h-12 w-12" />
+            {/* <CheckCircleIcon className="text-blue-700 h-12 w-12" /> */}
             <h3 className="m-3 font-bold">Verify your e-mail</h3>
             <p className="lg:px-48 px-0 text-center">
               We've sent lorem ipsum text to make sure that the visual makes

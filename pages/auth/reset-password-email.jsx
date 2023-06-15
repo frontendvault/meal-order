@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckCircleIcon } from "@heroicons/react/24/solid";
+// import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 
 const ResetPasswordMail = () => {
@@ -23,7 +23,7 @@ const ResetPasswordMail = () => {
             <h2 className="font-bold text-xl p-5 lg:m-5 m-0">
               Let's get you logged back in
             </h2>
-            <CheckCircleIcon className="text-green-600 h-12 w-12" />
+            {/* <CheckCircleIcon className="text-green-600 h-12 w-12" /> */}
             <h3 className="m-3 font-bold">Check your e-mail</h3>
             <p className="lg:px-48 text-center">
               A email has been send to your email@domain.com. Please check for
