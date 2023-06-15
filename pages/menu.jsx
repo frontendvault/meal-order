@@ -4,7 +4,7 @@ import MealItem from "@/components/Menu/Item";
 import data from "@/utils/data";
 import { FaMapMarkerAlt, FaSearch } from "react-icons/fa";
 import Category from "@/components/Categories/Category";
-import { getMenu } from "../services/menu/menu.api";
+import { getMenu } from "../services/menu.api";
 
 export default function Menu() {
   const categories = [
@@ -16,10 +16,10 @@ export default function Menu() {
   const [search, setSearch] = useState("");
 
   const getMenuList = () => {
-    getMenu().then(({ data }) => {
-      setMealsInfo(data.results);
-    });
-  };
+    getMenu().then(({data})=>{
+      setMealsInfo(data.meals)
+    })
+  }
 
   useEffect(() => {
     getMenuList();
