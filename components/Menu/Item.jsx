@@ -13,17 +13,10 @@ function MealItem({ meal }) {
   const [openModal, setOpenModal] = useState(false);
   const { state, dispatch } = useContext(Store);
   const { carts } = state;
-  const { cart, addCartItem } = useCart();
-
-  const addToCartHandler = (meal) => {
-    // const existItem = carts.cartItems.find((x) => x.slug === meal.slug);
-    // const quantity = existItem ? existItem.quantity + 1 : 1;
-
-    // dispatch({ type: "CART_ADD_ITEM", payload: { ...meal, quantity } });
-  };
+  const { addCartItem } = useCart();
 
   const handleAddToCart = (meal) => {
-    addCartItem(meal, 1);
+    addCartItem(meal.id, 1);
   };
 
   return (
@@ -33,7 +26,7 @@ function MealItem({ meal }) {
       </p>
 
       <Link href={`/meal/${meal.id}`}>
-        <img src={meal.image} alt={meal.name} style={{ height: '200px' }}/>
+        <img src={meal.image} alt={meal.name} style={{ height: "200px" }} />
       </Link>
 
       <div className="px-2" onClick={() => setOpenModal(true)}>
@@ -49,7 +42,7 @@ function MealItem({ meal }) {
       <div className="flex flex-col px-2">
         <div className="flex justify-between">
           <h2 className="text-sm mb-1 text-lg font-bold text-gray-800">
-            ${meal.price || '--'}
+            ${meal.price || "--"}
           </h2>
           <div className="ml-1 flex items-center">
             {[0, 1, 2, 3, 4].map((rating) => (
@@ -67,8 +60,8 @@ function MealItem({ meal }) {
         <button
           className=" text-white m-2 py-1 px-3 bg-blue-400 hover:bg-blue-500 rounded"
           onClick={() => {
-            handleAddToCart(meal)
-            }}
+            handleAddToCart(meal);
+          }}
         >
           ADD
         </button>
