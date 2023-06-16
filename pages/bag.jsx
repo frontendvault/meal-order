@@ -5,9 +5,6 @@ import React, { useContext, useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import Testimonials from "../components/Testimonials";
 
-import dynamic from "next/dynamic";
-// import axios from "axios";
-// import { toast } from "react-toastify";
 import Image from "next/image";
 import { Faqs } from "@/components/faq";
 import { useCart } from "@/utils/providers/cart.provider";
@@ -18,6 +15,7 @@ import { toast } from "react-toastify";
 function BagScreen() {
   const { cart, addCartItem, removeItem } = useCart();
   const [cartMeals, setCartMeals] = useState([]);
+  const router = useRouter();
 
   const totalPrice = () => {
     return cartMeals.reduce((a, c) => a + c.quantity * c.price, 0) + 69;
