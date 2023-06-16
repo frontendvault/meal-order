@@ -12,12 +12,35 @@ import Image from "next/image";
 import { Faqs } from "@/components/faq";
 import { useCart } from "@/utils/providers/cart.provider";
 import { getMenu } from "../services/menu.api";
+import client from "@/utils/client";
+import { toast } from "react-toastify";
 
 function BagScreen() {
   const { cart, addCartItem, removeItem } = useCart();
+  const [cartMeals, setCartMeals] = useState([]);
+
   const totalPrice = () => {
-    return cart.reduce((a, c) => a + c.quantity * c.price, 0) + 69;
+    return cartMeals.reduce((a, c) => a + c.quantity * c.price, 0) + 69;
   };
+
+  useEffect(() => {
+    if (!cart.length) {
+      return;
+    }
+    client
+      .get(`/v1/meals?limit=50&only=${cart.map((item) => item.id).join(",")}`)
+      .then(({ data }) => {
+        setCartMeals(
+          data.results.map((meal) => ({
+            ...meal,
+            quantity: cart.find((m) => m.id === meal.id).quantity,
+          }))
+        );
+      })
+      .catch(() => {
+        toast.error("Unable to load Cart data");
+      });
+  }, [cart]);
 
   return (
     <Layout title="MPO - Shopping Bag">
@@ -75,7 +98,7 @@ function BagScreen() {
                   role="list"
                   className="flex-auto divide-y divide-gray-200 overflow-y-auto md:px-6 md:pl-0 md:mr-10"
                 >
-                  {cart.map((item) => (
+                  {cartMeals.map((item) => (
                     <li key={item.id} className="flex space-x-6 py-6">
                       <Image
                         src={item?.image}
@@ -157,12 +180,12 @@ function BagScreen() {
               <dl className="mt-6 space-y-2">
                 <div className="flex items-center justify-between">
                   <dt className="text-sm text-gray-600">
-                    Subtotal ({cart.reduce((a, c) => a + c.quantity, 0)})
+                    Subtotal ({cartMeals.reduce((a, c) => a + c.quantity, 0)})
                   </dt>
                   <dd className="text-sm font-medium text-gray-900">
                     $
                     {Math.round(
-                      cart.reduce((a, c) => a + c.quantity * c.price, 0),
+                      cartMeals.reduce((a, c) => a + c.quantity * c.price, 0),
                       2
                     )}
                   </dd>
