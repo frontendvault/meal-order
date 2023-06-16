@@ -1,16 +1,26 @@
 import React, { useState, useEffect, useMemo } from "react";
-import Layout from "../components/Layout";
+import Layout from "@/components/Layout";
 import * as yup from "yup";
 import { useRouter } from "next/router";
 import { Formik, useFormik } from "formik";
-import { placeOrder } from "../services/order.api";
+import { placeOrder } from "@/services/order.api";
 import { useCart } from "@/utils/providers/cart.provider";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import { Radio, Group, Select } from "@mantine/core";
+import { Radio, Group, Select, TextInput } from "@mantine/core";
 import { SHIPPING_TYPE } from "@/const";
 import PickupForm from "@/components/views/shipping/PickupForm";
 import DeliveryForm from "@/components/views/shipping/DeliveryForm";
+import {
+	CardElement,
+	Elements,
+	useStripe,
+	useElements,
+	CardNumberElement,
+	CardExpiryElement,
+  CardCvcElement,
+} from "@stripe/react-stripe-js";
+import TextField from "@/components/input/TextField";
 
 const validationSchema = yup.object({
 	fullName: yup.string().required("Please enter your full name"),
@@ -18,7 +28,7 @@ const validationSchema = yup.object({
 	postalCode: yup.number().required("Please enter your postal code"),
 });
 
-export default function ShippingScreen() {
+export default function Shipping() {
 	const router = useRouter();
 	const [shippingType, setShippingType] = useState(SHIPPING_TYPE.DELIVERY);
 	const { cart } = useCart();
@@ -32,7 +42,7 @@ export default function ShippingScreen() {
 			deliveryDate: "",
 			pickupAddress: "",
 			pickupDate: "",
-			phoneNumber: ""
+			phoneNumber: "",
 		},
 		validationSchema,
 		onSubmit: (values) => {
@@ -57,7 +67,7 @@ export default function ShippingScreen() {
 				fullName: detail.fullName,
 				deliveryAddress: detail.deliveryAddress,
 				postalCode: detail.postalCode,
-				phoneNumber: detail.phoneNumber
+				phoneNumber: detail.phoneNumber,
 			});
 			console.log("cart", detail, shipmentAddressCookie);
 		}
@@ -85,8 +95,8 @@ export default function ShippingScreen() {
 	}, [formik.values]);
 
 	return (
-		<Layout title="MPO Shipping Address">
-			<div className="mx-auto max-w-screen-md pt-20 px-5">
+		<div>
+			<div className="mx-auto max-w-screen-lg pt-20">
 				<Radio.Group
 					name="shippingMethod"
 					label="Select your shipping method"
@@ -101,7 +111,7 @@ export default function ShippingScreen() {
 				</Radio.Group>
 			</div>
 			<Formik onSubmit={formik.handleSubmit}>
-				<form className="mx-auto max-w-screen-md pt-4 pb-20 px-5">
+				<form className="mx-auto max-w-screen-lg pt-4 pb-20 pr-4">
 					<div>
 						{isDelivery ? (
 							<DeliveryForm {...formsProps()} />
@@ -110,7 +120,7 @@ export default function ShippingScreen() {
 						)}
 					</div>
 					{isSubscriptionExist && (
-						<div className="mb-4">
+						<div className="mb-4 w-1/2">
 							<Select
 								label="Subscription Frequency"
 								placeholder="Pick the subscription frequency"
@@ -122,19 +132,31 @@ export default function ShippingScreen() {
 							/>
 						</div>
 					)}
-					<div className="mb-4 flex justify-between">
-						<button
-							disabled={formik.isSubmitting}
-							type="submit"
-							className="w-full  border border-transparent bg-blue-600 py-1 px-4 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-						>
-							{formik.isSubmitting ? "proceeding... " : "Proceed to Payment"}
-						</button>
+					<div>
+						<h1 className="mb-4 text-xl font-semibold">Payment Method</h1>
+						<div className="mb-4">
+							<p className="mb-2 text-sm">Credit Card Number</p>
+							<div className="border-solid border-[1px] border-gray-300 p-3 rounded-md">
+								<CardNumberElement />
+							</div>
+						</div>
+						<div className="flex gap-4 mb-4">
+							<div className="w-full">
+								<p className="mb-2 text-sm">Credit Card Number</p>
+								<div className="border-solid border-[1px] border-gray-300 p-3 rounded-md">
+									<CardExpiryElement />
+								</div>
+							</div>
+							<div className="w-full">
+								<p className="mb-2 text-sm">Credit Card Number</p>
+								<div className="border-solid border-[1px] border-gray-300 p-3 rounded-md">
+									<CardCvcElement />
+								</div>
+							</div>
+						</div>
 					</div>
 				</form>
 			</Formik>
-		</Layout>
+		</div>
 	);
 }
-
-ShippingScreen.auth = true;
