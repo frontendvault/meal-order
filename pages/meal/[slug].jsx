@@ -9,7 +9,7 @@ import Testimonials from "../../components/Testimonials";
 import Layout from "../../components/Layout";
 import { Store } from "../../utils/Store";
 import { Faqs } from "@/components/faq";
-import { getMenuDetail } from "../../services/menu/menu.api";
+import { getMenuDetail } from "../../services/menu.api";
 
 export default function MealScreen() {
   // const { meal } = props;
@@ -18,8 +18,10 @@ export default function MealScreen() {
   const { query } = useRouter();
   const { slug } = query;
   const [quantity, setQuantity] = useState(1);
+  const [meal, setMeal] = useState();
 
   const renderMealTag = () => {
+    if (meal.tags)
     return (
       <ul className="flex gap-2">
         {meal.tags.map((tag) => (
@@ -35,6 +37,7 @@ export default function MealScreen() {
   };
 
   const renderNutrients = () => {
+    if (meal.nutrients)
     return (
       <div className="border mt-4">
         <div className="flex items-center gap-2 bg-slate-100 p-4">
@@ -66,6 +69,7 @@ export default function MealScreen() {
   };
 
   const renderIngredient = () => {
+    if (meal.ingredients)
     return (
       <div className="border mt-4  min-w-[600px]">
         <div className="flex items-center gap-2 bg-slate-100 p-4">
@@ -95,7 +99,7 @@ export default function MealScreen() {
   const menuDetails = (id) => {
     getMenuDetail(id)
       .then(({ data }) => {
-        console.log("data", data);
+        setMeal(data)
       })
       .catch(({ res }) => {});
   };
@@ -103,8 +107,6 @@ export default function MealScreen() {
   useEffect(() => {
     menuDetails(slug);
   }, [slug]);
-
-  const meal = data.meals.find((x) => x.slug === slug);
 
   if (!meal) {
     return (
@@ -123,8 +125,8 @@ export default function MealScreen() {
         <div className="md:px-10 mt-10 container mx-auto">
           <Link href="/menu">Back to meals</Link>
         </div>
-        <div className="md:px-10 mt-10 container mx-auto  flex">
-          <div className=" mr-8 md:w-[500]">
+        <div className="md:px-10 mt-10 container mx-auto flex justify-between">
+          <div className=" mr-8 md:w-[500px]">
             <ul className="">
               <li>
                 <div className="mb-2">{renderMealTag()}</div>
@@ -174,35 +176,35 @@ export default function MealScreen() {
             </ul>
             <div id="nutrient">{renderNutrients()}</div>
           </div>
-          <div className="flex md:w-[500px] flex-col">
-            <div className="md:w-[500px]">
+          <div className="flex flex-col">
+            <div className="">
               <Image
-                src={meal.imageUrl}
+                src={meal.image}
                 alt={meal.name}
                 width={500}
                 height={500}
               ></Image>
             </div>
-            <div className=" flex justify-between">
+            {/* <div className=" flex justify-between">
               <Image
-                src={meal.imageUrl}
+                src={meal.image}
                 alt={meal.name}
                 width={200}
                 height={200}
               />
               <Image
-                src={meal.imageUrl}
+                src={meal.image}
                 alt={meal.name}
                 width={200}
                 height={200}
               />
               <Image
-                src={meal.imageUrl}
+                src={meal.image}
                 alt={meal.name}
                 width={200}
                 height={200}
               />
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="md:mt-20">

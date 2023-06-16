@@ -23,7 +23,7 @@ function MealItem({ meal }) {
   };
 
   const handleAddToCart = (meal) => {
-    addCartItem(meal.id, 1);
+    addCartItem(meal, 1);
   };
 
   return (
