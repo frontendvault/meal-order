@@ -1,11 +1,12 @@
 import React from "react";
 
-function TextField({ parentProps, label, error, ...arg }) {
+function TextField({ parentProps, label, error, required, ...arg }) {
   return (
     <div {...parentProps}>
       {label && (
         <label className="block text-sm font-medium text-gray-700">
           {label}
+          {required && <span className="text-red-500"> *</span>}
         </label>
       )}
       <div className="mt-1">
