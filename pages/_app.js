@@ -1,5 +1,4 @@
 import "@/styles/globals.css";
-import { StoreProvider } from "@/utils/Store";
 import { UserProvider } from "@/utils/providers/user.provider";
 import { CartProvider } from "@/utils/providers/cart.provider";
 import { ToastContainer } from "react-toastify";
@@ -15,14 +14,14 @@ export default function App({ Component, pageProps }) {
 	return (
 		<Elements stripe={stripePromise}>
 			<MantineProvider>
-				<StoreProvider>
+				<CartProvider>
 					<ToastContainer />
 					<UserProvider guest={guest}>
 						<CartProvider>
 							<Component {...pageProps} />
 						</CartProvider>
 					</UserProvider>
-				</StoreProvider>
+				</CartProvider>
 			</MantineProvider>
 		</Elements>
 	);

@@ -4,16 +4,15 @@ import React, { useState, useEffect, useMemo } from "react";
 import Layout from "../components/Layout";
 import Testimonials from "../components/Testimonials";
 
-import Image from "next/image";
 import { Faqs } from "@/components/faq";
 import { useCart } from "@/utils/providers/cart.provider";
 import client from "@/utils/client";
 import { toast } from "react-toastify";
 import Shipping from "@/components/views/bag/Shipping";
-import { NumberInput } from "@mantine/core";
+import { Image, NumberInput, Rating, Text } from "@mantine/core";
 
 function BagScreen() {
-	const { cart, addCartItem, removeItem } = useCart();
+	const { cart, addCartItem, removeCartItem } = useCart();
 	const [cartMeals, setCartMeals] = useState([]);
 	const router = useRouter();
 
@@ -40,9 +39,9 @@ function BagScreen() {
 			});
 	}, [cart]);
 
-  const isCartEmpty = useMemo(() => {
-    return !cart.length
-  }, [cart])
+	const isCartEmpty = useMemo(() => {
+		return !cart.length;
+	}, [cart]);
 
 	return (
 		<Layout title="MPO - Shopping Bag">
@@ -57,9 +56,9 @@ function BagScreen() {
 				</div>
 				<div
 					// className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16"
-					className="mt-1  flex items-start flex-col md:flex-row"
+					className="mt-4 flex items-start flex-col lg:flex-row"
 				>
-					<section aria-labelledby="cart-heading" className="md:w-2/3">
+					<section aria-labelledby="cart-heading" className="w-full lg:w-2/3">
 						{isCartEmpty ? (
 							<div>
 								{/* <Link href="/menu">Go to Menu</Link> */}
@@ -95,13 +94,32 @@ function BagScreen() {
 								</li>
 							</div>
 						) : (
+							<div></div>
+						)}
+						<Shipping />
+					</section>
+
+					{/* Order summary */}
+					<section
+						aria-labelledby="summary-heading"
+						className={` bg-gray-100  px-4 py-6 sm:p-6 lg:mt-0 lg:p-8 rounded w-full right-4 lg:w-1/3 ${
+							!cart.length ? "hidden" : ""
+						}`}
+					>
+						<div>
+							<h2
+								id="summary-heading"
+								className="text-2xl mb-2 font-bold text-gray-900"
+							>
+								Summary
+							</h2>
 							<div>
 								<ul
 									role="list"
-									className="flex-auto divide-y divide-gray-200 overflow-y-auto md:px-6 md:pl-0 md:mr-10"
+									className="flex-auto divide-y divide-gray-200 overflow-y-auto"
 								>
 									{cartMeals.map((item) => (
-										<li key={item.id} className="flex space-x-6 py-6">
+										<li key={item.id} className="flex space-x-6 py-4">
 											<Image
 												src={item?.image}
 												alt={item?.name}
@@ -111,69 +129,42 @@ function BagScreen() {
 
 											<div className="flex flex-col justify-between space-y-4 grow">
 												<div className="space-y-1 text-sm grow">
-													<div className="flex items-center justify-between grow">
+													<div className="flex items-center gap-2">
 														<div>
 															<h3 className="text-gray-900 text-lg font-semibold">
 																{item?.name}
 															</h3>
 														</div>
-                            <div className="w-[50px]">
-                              <NumberInput
-                                onChange={(value) => addCartItem(item, value)}
-                                value={item?.quantity}
-                              ></NumberInput>
-                            </div>
+														<div>
+															<Text variant="sm" color="gray">x {item?.quantity}</Text>{" "}
+														</div>
 													</div>
-
-													<p>{item?.description}</p>
-													<p>{item?.rating}</p>
-
-													<p className="flex justify-end font-bold text-2xl text-gray-900">
-														${item?.price}
-													</p>
+													<div className="flex items-center justify-between">
+														<div>
+															<Rating readOnly defaultValue={item.rating} />
+														</div>
+														<div>
+															<p className="font-bold text-xl text-gray-900">
+																${item?.price}
+															</p>
+														</div>
+													</div>
 												</div>
 
 												<div className="flex space-x-4">
 													<button
+														onClick={() => removeCartItem(item.id)}
 														type="button"
-														className="text-sm font-medium  hover:text-indigo-500 underline"
+														className="text-sm font-medium text-red-600 hover:text-red-400 underline"
 													>
-														Add to favorites
+														Remove
 													</button>
-													<div className="flex border-l border-gray-300 pl-4">
-														<button
-															onClick={() => removeItem(item.id)}
-															type="button"
-															className="text-sm font-medium text-red-600 hover:text-red-400 underline"
-														>
-															Remove
-														</button>
-													</div>
 												</div>
 											</div>
 										</li>
 									))}
 								</ul>
 							</div>
-						)}
-						<Shipping />
-					</section>
-
-					{/* Order summary */}
-					<section
-						aria-labelledby="summary-heading"
-						className={`mt-16 bg-gray-100  px-4 py-6 sm:p-6 lg:mt-0 lg:p-8 rounded w-full right-4 md:w-1/3 ${
-							!cart.length ? "hidden" : ""
-						}`}
-					>
-						<div>
-							<h2
-								id="summary-heading"
-								className="text-2xl mb-10 font-bold text-gray-900"
-							>
-								Summary
-							</h2>
-
 							<dl className="mt-6 space-y-2">
 								<div className="flex items-center justify-between">
 									<dt className="text-sm text-gray-600">

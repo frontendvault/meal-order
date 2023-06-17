@@ -69,7 +69,6 @@ export default function Shipping() {
 				postalCode: detail.postalCode,
 				phoneNumber: detail.phoneNumber,
 			});
-			console.log("cart", detail, shipmentAddressCookie);
 		}
 	}, []);
 
@@ -96,7 +95,7 @@ export default function Shipping() {
 
 	return (
 		<div>
-			<div className="mx-auto max-w-screen-lg pt-20">
+			<div className="mx-auto max-w-screen-lg">
 				<Radio.Group
 					name="shippingMethod"
 					label="Select your shipping method"

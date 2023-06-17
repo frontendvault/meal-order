@@ -1,27 +1,99 @@
 import Link from "next/link";
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import Modal from "./Modal";
 import { Store } from "../../utils/Store";
 import { FaStar } from "react-icons/fa";
-import { useCart } from "@/utils/providers/cart.provider";
+import { CartContext, useCart } from "@/utils/providers/cart.provider";
+import { Card, Image, Badge, Button, Group, Text, Rating } from "@mantine/core";
+import { useRouter } from "next/router";
+import Counter from "../Counter";
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
+	return classes.filter(Boolean).join(" ");
 }
 
 function MealItem({ meal }) {
-  const [openModal, setOpenModal] = useState(false);
-  const { state, dispatch } = useContext(Store);
-  const { carts } = state;
-  const { addCartItem } = useCart();
+	const [openModal, setOpenModal] = useState(false);
+	const { addCartItem, cart, removeCartItem } = useCart();
 
-  const handleAddToCart = (meal) => {
-    addCartItem(meal.id, 1);
-  };
+	const handleAddToCart = (meal, quantity) => {
+    if (quantity > 0) {
+		  addCartItem(meal.id, quantity);
+    } else {
+      removeCartItem(meal.id)
+    }
+	};
+	const cartItemsCount = useMemo(
+		() => 
+			cart.reduce((count, item) => {
+        if (item) {
+				  if (item.id === meal.id) return count + item.quantity;
+        }
+				return count;
+			}, 0),
+		[cart, meal.id]
+	);
 
-  return (
-    <div className="relative card mb-10 md:mb-0 ">
-      <p className="absolute bg-red-500  px-2 text-white text-sm font-semibold right-2 rounded">
+	const renderMealTag = () => {
+		if (meal.tags)
+			return meal.tags.map((tag) => (
+				<Badge color="pink" variant="light">
+					{tag}
+				</Badge>
+			));
+	};
+
+	return (
+		<div className="relative mb-10 md:mb-0 ">
+			<Card cu shadow="sm" padding="lg" radius="md" withBorder>
+				<Card.Section>
+					<Link href={`/meal/${meal.id}`}>
+						<Image src={meal.image} height={160} alt="Norway" />
+					</Link>
+				</Card.Section>
+
+				<Group className="cursor-pointer" position="apart" mt="md">
+					<Link href={`/meal/${meal.id}`}>
+						<Text weight={500}>{meal.name}</Text>
+					</Link>
+				</Group>
+				{renderMealTag()}
+        <Text size="sm" color="dimmed">
+					{meal.description}
+				</Text>
+				<Group position="apart" mb="xs" className="w-full">
+					<div className="flex items-center justify-between w-full">
+            <div>
+						  <Rating defaultValue={meal.rating} readOnly />
+            </div>
+						<Group className="cursor-pointer" position="apart" mt="xs" mb="xs">
+							<Link href={`/meal/${meal.id}`}>
+								<Text size={24} weight={500}>
+									{meal.price}$
+								</Text>
+							</Link>
+						</Group>
+					</div>
+				</Group>
+				<div>
+					{cartItemsCount ? (
+						<div className="mt-4">
+							<Counter value={cartItemsCount} setValue={(value) => handleAddToCart(meal, value)} />
+						</div>
+					) : (
+						<Button
+							type="mantine-button"
+							className="bg-blue-500 mt-5"
+							fullWidth
+							radius="md"
+							onClick={() => handleAddToCart(meal, 1)}
+						>
+							Add
+						</Button>
+					)}
+				</div>
+			</Card>
+			{/* <p className="absolute bg-red-500  px-2 text-white text-sm font-semibold right-2 rounded">
         {meal.type}
       </p>
 
@@ -66,10 +138,10 @@ function MealItem({ meal }) {
           ADD
         </button>
       </div>
-      <div className="flex items-center justify-between"></div>
-      <Modal open={openModal} meal={meal} onClose={() => setOpenModal(false)} />
-    </div>
-  );
+      <div className="flex items-center justify-between"></div> */}
+			{/* <Modal open={openModal} meal={meal} onClose={() => setOpenModal(false)} /> */}
+		</div>
+	);
 }
 
 export default MealItem;
