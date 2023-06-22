@@ -36,7 +36,6 @@ function LoginScreen() {
         })
         .catch((res) => {
           formik.setSubmitting(false);
-          console.log(res);
         });
     },
   });

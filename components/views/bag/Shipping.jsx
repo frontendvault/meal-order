@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from "react";
-import Layout from "@/components/Layout";
 import * as yup from "yup";
 import { useRouter } from "next/router";
 import { Formik, useFormik } from "formik";
@@ -12,36 +11,28 @@ import { SHIPPING_TYPE } from "@/const";
 import PickupForm from "@/components/views/shipping/PickupForm";
 import DeliveryForm from "@/components/views/shipping/DeliveryForm";
 import {
-	CardElement,
-	Elements,
-	useStripe,
-	useElements,
-	CardNumberElement,
-	CardExpiryElement,
-  CardCvcElement,
+	PaymentElement,
 } from "@stripe/react-stripe-js";
 import TextField from "@/components/input/TextField";
 
 const validationSchema = yup.object({
 	fullName: yup.string().required("Please enter your full name"),
 	deliveryAddress: yup.string().required("Please enter your delivery address"),
-	postalCode: yup.number().required("Please enter your postal code"),
+	postalCode: yup.string().required("Please enter your postal code"),
 });
 
-export default function Shipping() {
-	const router = useRouter();
+export default function Shipping({ setShippingFormValues }) {
 	const [shippingType, setShippingType] = useState(SHIPPING_TYPE.DELIVERY);
 	const { cart } = useCart();
 	const shipmentAddressCookie = Cookies.get("shipmentAddress");
 
 	const formik = useFormik({
 		initialValues: {
-			fullName: "",
-			deliveryAddress: "",
-			postalCode: "",
+			address1: "",
+			address2: "",
 			deliveryDate: "",
-			pickupAddress: "",
-			pickupDate: "",
+			state: "",
+			postalCode: "",
 			phoneNumber: "",
 		},
 		validationSchema,
@@ -64,8 +55,6 @@ export default function Shipping() {
 		if (shipmentAddressCookie) {
 			const detail = JSON.parse(shipmentAddressCookie);
 			formik.setValues({
-				fullName: detail.fullName,
-				deliveryAddress: detail.deliveryAddress,
 				postalCode: detail.postalCode,
 				phoneNumber: detail.phoneNumber,
 			});
@@ -90,11 +79,15 @@ export default function Shipping() {
 	};
 
 	useEffect(() => {
-		console.log(formik.values);
+		setShippingFormValues(formik.values);
 	}, [formik.values]);
 
+	const paymentElementOptions = {
+		layout: "tabs",
+	};
+
 	return (
-		<div>
+		<div className="w-full">
 			<div className="mx-auto max-w-screen-lg">
 				<Radio.Group
 					name="shippingMethod"
@@ -112,11 +105,12 @@ export default function Shipping() {
 			<Formik onSubmit={formik.handleSubmit}>
 				<form className="mx-auto max-w-screen-lg pt-4 pb-20 pr-4">
 					<div>
-						{isDelivery ? (
+						{/* {isDelivery ? (
 							<DeliveryForm {...formsProps()} />
 						) : (
 							<PickupForm {...formsProps()} />
-						)}
+						)} */}
+						<DeliveryForm {...formsProps()} />
 					</div>
 					{isSubscriptionExist && (
 						<div className="mb-4 w-1/2">
@@ -132,27 +126,10 @@ export default function Shipping() {
 						</div>
 					)}
 					<div>
-						<h1 className="mb-4 text-xl font-semibold">Payment Method</h1>
-						<div className="mb-4">
-							<p className="mb-2 text-sm">Credit Card Number</p>
-							<div className="border-solid border-[1px] border-gray-300 p-3 rounded-md">
-								<CardNumberElement />
-							</div>
-						</div>
-						<div className="flex gap-4 mb-4">
-							<div className="w-full">
-								<p className="mb-2 text-sm">Credit Card Number</p>
-								<div className="border-solid border-[1px] border-gray-300 p-3 rounded-md">
-									<CardExpiryElement />
-								</div>
-							</div>
-							<div className="w-full">
-								<p className="mb-2 text-sm">Credit Card Number</p>
-								<div className="border-solid border-[1px] border-gray-300 p-3 rounded-md">
-									<CardCvcElement />
-								</div>
-							</div>
-						</div>
+						<PaymentElement
+							id="payment-element"
+							options={paymentElementOptions}
+						/>
 					</div>
 				</form>
 			</Formik>

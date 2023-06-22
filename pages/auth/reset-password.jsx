@@ -20,7 +20,6 @@ function ResetPasswordScreen() {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        console.log(user);
         router.push("/test");
       })
       .catch((error) => {
@@ -31,7 +30,6 @@ function ResetPasswordScreen() {
         const email = error.customData.email;
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log(error);
       });
   };
 
@@ -81,7 +79,6 @@ function ResetPasswordScreen() {
   } = useForm();
 
   const submitHandler = async ({ firstName, lastName, email, password }) => {
-    console.log(firstName, lastName, email, password);
     try {
       await axios.post("/api/auth/signup", {
         firstName,

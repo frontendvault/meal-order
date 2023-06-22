@@ -9,10 +9,8 @@ import { Elements } from "@stripe/react-stripe-js";
 
 export default function App({ Component, pageProps }) {
 	const guest = Component.guest;
-  const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
 
 	return (
-		<Elements stripe={stripePromise}>
 			<MantineProvider>
 				<CartProvider>
 					<ToastContainer />
@@ -23,6 +21,5 @@ export default function App({ Component, pageProps }) {
 					</UserProvider>
 				</CartProvider>
 			</MantineProvider>
-		</Elements>
 	);
 }

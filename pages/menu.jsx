@@ -6,6 +6,8 @@ import { FaMapMarkerAlt, FaSearch } from "react-icons/fa";
 import Category from "@/components/Categories/Category";
 import { getMenu } from "../services/menu.api";
 import { Box, LoadingOverlay, Text } from "@mantine/core";
+import { useDebouncedValue } from "@mantine/hooks";
+import { toast } from "react-toastify";
 
 export default function Menu() {
 	const [loading, setLoading] = useState(true);
@@ -16,21 +18,30 @@ export default function Menu() {
 	const [mealsInfo, setMealsInfo] = useState([]);
 	const [activeCategory, setActiveCategory] = useState(null);
 	const [search, setSearch] = useState("");
+	const [debouncedSearch] = useDebouncedValue(search, 1000);
 
-	const getMenuList = () => {
-		setLoading(true);
-		getMenu()
-			.then(({ data }) => {
-				setMealsInfo(data.meals);
-			})
-			.finally(() => {
-				setLoading(false);
+	const handleFetchMenu = async () => {
+		try {
+			setLoading(true);
+			getMenu({ name: debouncedSearch }).then(({ data }) => {
+				setMealsInfo(data.results);
 			});
+			const { data } = await getMenu({ name: debouncedSearch });
+			setMealsInfo(data.results);
+		} catch (error) {
+			toast.error(error?.message || error);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	useEffect(() => {
-		getMenuList();
+		handleFetchMenu();
 	}, []);
+
+	useEffect(() => {
+		handleFetchMenu();
+	}, [debouncedSearch]);
 
 	const filteredMeals = useMemo(() => {
 		return mealsInfo.filter((meal) => {
@@ -66,7 +77,7 @@ export default function Menu() {
 
 					<div className="gap-4 grid grid-cols-1 lg:grid-cols-4 mx-4">
 						<div className="w-full col-span-1">
-							<div className="bg-gray-100  border p-5 rounded shadow-md w-full">
+							<div className="bg-white  border p-5 rounded shadow-md w-full">
 								<Category
 									categories={categories}
 									activeCategory={activeCategory}
@@ -75,7 +86,7 @@ export default function Menu() {
 							</div>
 						</div>
 						<div className="relative col-span-1 lg:col-span-3">
-						  <LoadingOverlay visible={loading} overlayBlur={2} />
+							<LoadingOverlay visible={loading} overlayBlur={2} />
 							{filteredMeals && filteredMeals.length ? (
 								<div className="w-full py-5 md:py-6 md:pt-0 rounded mb-20">
 									<ul

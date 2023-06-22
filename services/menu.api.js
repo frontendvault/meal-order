@@ -1,9 +1,11 @@
 import { AuthClient } from "@/utils/client";
 
-export const getMenu = () => {
-    return AuthClient().get("/v1/menus/64637dc0c16208b58b151613");
+export const getMenu = (params) => {
+    return AuthClient().get(`/v1/menus/${process.env.NEXT_PUBLIC_RESTAURANT_ID}/meals`, {
+        params
+    });
 };
 
-export const getMenuDetail = (item) => {
+export const getMealDetail = (item) => {
     return AuthClient().get(`/v1/meals/${item}`);
 };

@@ -9,7 +9,7 @@ import Testimonials from "../../components/Testimonials";
 import Layout from "../../components/Layout";
 import { Store } from "../../utils/Store";
 import { Faqs } from "@/components/faq";
-import { getMenuDetail } from "../../services/menu.api";
+import { getMealDetail } from "../../services/menu.api";
 import { CartContext, useCart } from "@/utils/providers/cart.provider";
 
 export default function MealScreen() {
@@ -98,7 +98,7 @@ export default function MealScreen() {
 	};
 
 	const menuDetails = (id) => {
-		getMenuDetail(id)
+		getMealDetail(id)
 			.then(({ data }) => {
 				setMeal(data);
 			})

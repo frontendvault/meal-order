@@ -58,7 +58,7 @@ function MealItem({ meal }) {
 					</Link>
 				</Group>
 				{renderMealTag()}
-        <Text size="sm" color="dimmed">
+        <Text size="sm" color="dimmed" lineClamp={3}>
 					{meal.description}
 				</Text>
 				<Group position="apart" mb="xs" className="w-full">

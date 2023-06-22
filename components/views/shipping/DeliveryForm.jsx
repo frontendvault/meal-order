@@ -1,21 +1,16 @@
 import React from "react";
 import { DateInput } from "@mantine/dates";
 import TextField from "@/components/input/TextField";
+import moment from "moment";
 
 const DeliveryForm = ({ formik, values, setValues }) => {
+	const disabledDateBefore = (date) => {
+		return moment(date).isBefore(moment(), 'D')
+	}
 	return (
 		<div>
 			<h1 className="mb-4 text-xl font-semibold">Delivery Information</h1>
 			<div className="flex gap-4">
-				<div className="mb-4 w-full">
-					<TextField
-						required
-						label="Full Name"
-						placeholder="Full Name"
-						{...formik.getFieldProps("fullName")}
-						error={formik.touched.fullName && formik.errors.fullName}
-					/>
-				</div>
 				<div className="mb-4 w-full">
 					<TextField
 						required
@@ -33,6 +28,7 @@ const DeliveryForm = ({ formik, values, setValues }) => {
 					label="Delivery Date"
 					name="deliveryDate"
 					placeholder="Delivery Date"
+					excludeDate={disabledDateBefore}
 					value={values.deliveryDate}
 					onChange={(data) => setValues({ ...values, deliveryDate: data })}
 				/>
@@ -42,20 +38,41 @@ const DeliveryForm = ({ formik, values, setValues }) => {
 					{/* <label htmlFor="deliveryAddress">Delivery Address</label> */}
 					<TextField
 						required
-						label="Delivery Address"
-						placeholder="Delivery Address"
-						{...formik.getFieldProps("deliveryAddress")}
+						label="Address 1"
+						placeholder=""
+						{...formik.getFieldProps("address1")}
 						error={
 							formik.touched.deliveryAddress && formik.errors.deliveryAddress
 						}
 					/>
 				</div>
 				<div className="mb-4 w-full">
+					{/* <label htmlFor="deliveryAddress">Delivery Address</label> */}
+					<TextField
+						label="Address 2 (Optional)"
+						placeholder=""
+						{...formik.getFieldProps("address2")}
+						error={
+							formik.touched.deliveryAddress && formik.errors.deliveryAddress
+						}
+					/>
+				</div>
+			</div>
+			<div className="mb-4 flex gap-4">
+				<div className=" w-full">
 					{/* <label htmlFor="postalCode">Postal Code</label> */}
 					<TextField
 						required
+						label="State"
+						{...formik.getFieldProps("state")}
+						onBlur={formik.handleBlur}
+						error={formik.touched.postalCode && formik.errors.postalCode}
+					/>
+				</div>
+				<div className=" w-full">
+					<TextField
+						required
 						label="Postal Code"
-						type="number"
 						placeholder="Postal Code"
 						{...formik.getFieldProps("postalCode")}
 						onBlur={formik.handleBlur}
