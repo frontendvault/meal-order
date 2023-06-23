@@ -4,7 +4,7 @@ import MealItem from "@/components/Menu/Item";
 import data from "@/utils/data";
 import { FaMapMarkerAlt, FaSearch } from "react-icons/fa";
 import Category from "@/components/Categories/Category";
-import { getMenu } from "../services/menu.api";
+import { getMealsByRestaurant } from "../services/menu.api";
 import { Box, LoadingOverlay, Text } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { toast } from "react-toastify";
@@ -23,10 +23,10 @@ export default function Menu() {
 	const handleFetchMenu = async () => {
 		try {
 			setLoading(true);
-			getMenu({ name: debouncedSearch }).then(({ data }) => {
+			getMealsByRestaurant({ name: debouncedSearch }).then(({ data }) => {
 				setMealsInfo(data.results);
 			});
-			const { data } = await getMenu({ name: debouncedSearch });
+			const { data } = await getMealsByRestaurant({ name: debouncedSearch });
 			setMealsInfo(data.results);
 		} catch (error) {
 			toast.error(error?.message || error);
