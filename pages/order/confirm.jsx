@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-// import Layout from "../components/Layout";
+import Layout from "../components/Layout";
 
 import dynamic from "next/dynamic";
 
 function OrderConfirm() {
   return (
-    // <Layout title="MPO - Order Confrim">
+    <Layout title={"MPO - Order Confrim"}>
     <div className="mt-36 p-5">
       <div className="lg:mt-12 mt-4 lg:px-6 px-0">
         <Link href="/menu" className="flex items-center text-sm mb-2 mr-2">
@@ -185,7 +185,7 @@ function OrderConfirm() {
         </section>
       </div>
     </div>
-    // </Layout>
+    </Layout>
   );
 }
 
