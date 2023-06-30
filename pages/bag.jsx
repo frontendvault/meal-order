@@ -22,7 +22,7 @@ const stripePromise = loadStripe(
 
 function BagScreen() {
 	const { cart, addCartItem, removeCartItem } = useCart();
-	const [cartMeals, setCartMeals] = useState([]);
+	const [cartMeals, setCartMeals] = useState([]); 
 	const [shippingFormValues, setShippingFormValues] = useState({});
 	const [clientSecret, setClientSecret] = useState("");
 	const [paymentIntent, setPaymentIntent] = useState({});
