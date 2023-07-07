@@ -32,3 +32,10 @@ body {
 
 /* Page */
 @import "./pages/faq.css";
+
+.mainSubscriptionBg {
+  background-color: #e5e7eb
+}
+.subscriptionBg {
+  background-color: #dee2e6
+}
