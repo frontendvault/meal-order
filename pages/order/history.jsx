@@ -1,18 +1,26 @@
-// import { ChevronLeftIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
-import React from "react";
-// import Layout from "../components/Layout";
+// ** React and Hooks Import
+import React, {useState} from "react";
 
+// ** Next Tag Import
+import Image from "next/image";
 import dynamic from "next/dynamic";
 
-function BagScreen() {
-  const Items = ["", "", ""];
+// ** Hero icons Import
+import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+
+// ** Header Import
+import Layout from "@/components/Layout";
+
+const BagScreen = () => {
+
+  const [items, setItems] = useState(["", "", ""])
+
   return (
-    // <Layout title="MPO - Order History">
-    <div className="mt-36 p-5">
+    <Layout title="MPO - Order History">
+    <div className="p-5">
       <div className="lg:mt-12 mt-4 lg:px-6 px-0">
         <a href="/menu" className="flex items-center text-sm mb-2 mr-2">
-          {/* <ChevronLeftIcon className="h-3 w-3 mr-2" /> */}
+          <ChevronLeftIcon className="h-3 w-3 mr-2" />
           <p>Back</p>
         </a>
         <h1 className=" text-3xl font-bold">Order History</h1>
@@ -68,7 +76,7 @@ function BagScreen() {
                 </div>
               </div>
 
-              <div className="pt-4 lg:pb-20 pb-8">
+              {/* <div className="pt-4 lg:pb-20 pb-8">
                 <div className="bg-yellow-500  flex w-full mb-8 text-yellow-500">
                   <div className="py-4 px-4 text-left">
                     <div className="flex gap-4 items-center">
@@ -218,7 +226,7 @@ function BagScreen() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="w-full">
                 <div className="table-fixed w-full text-left">
@@ -242,7 +250,7 @@ function BagScreen() {
                     </div>
                   </div>
                   <div>
-                    {Items.map((e, i) => {
+                    {items?.map((e, i) => {
                       return (
                         <div
                           className="cursor-pointer group flex lg:flex-row flex-col w-full mb-4 bg-blue-100 text-blue-700 bg-blue-100"
@@ -272,7 +280,7 @@ function BagScreen() {
                           </div>
                           <div className="py-4 px-4 text-left w-full lg:w-[50%] ease-in-out transisition duration-300 group-hover:bg-blue-700">
                             <div className="grid lg:grid-cols-3 grid-cols-1">
-                              {Items.map((e, i) => {
+                              {items?.map((e, i) => {
                                 return (
                                   <div
                                     key={i + 1}
@@ -342,7 +350,7 @@ function BagScreen() {
         </section>
       </div>
     </div>
-    // </Layout>
+    </Layout>
   );
 }
 
