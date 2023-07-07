@@ -1,14 +1,14 @@
 import Layout from "../components/Layout";
-import FAQ from "../components/FAQ";
+import { Faqs } from "@/components/faq";
 
-const faq = () => {
+export default function FaqPage() {
   return (
     <Layout title={"MPO: Frequently Asked Questions"}>
       <div className="bg-gray-50 py-10">
-        <FAQ />
+        <div className="bg-gray-50">
+          <Faqs />
+        </div>
       </div>
     </Layout>
   );
-};
-
-export default faq;
+}

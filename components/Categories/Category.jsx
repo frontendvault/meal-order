@@ -1,6 +1,6 @@
 import React from "react";
 
-const Category = ({ category, filterCategories }) => {
+const Category = ({ categories, setActiveCategory }) => {
   return (
     <>
       <div className="pb-5">
@@ -8,14 +8,16 @@ const Category = ({ category, filterCategories }) => {
           Categories
         </h4>
         <div className="flex flex-col h-[200px] overflow-y-scroll divide-y divide-slate-300">
-          {category.map((cate) => {
+          {categories.map((category) => {
             return (
               <button
-                key={cate}
+                key={category}
                 className=" text-gray-500 px-4 py-2  hover:bg-blue-500 hover:text-white text-left "
-                onClick={() => filterCategories(cate)}
+                onClick={() =>
+                  setActiveCategory(category === "All" ? null : category)
+                }
               >
-                {cate}
+                {category}
               </button>
             );
           })}
