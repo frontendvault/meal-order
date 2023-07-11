@@ -70,6 +70,8 @@ const OrderConfirm = () => {
                           )
                         })
                       }
+
+
                     </div>
 
                     <div className="items-center lg:gap-12 gap-8 flex lg:flex-row flex-col w-full lg:p-6 p-4 mt-8 mb-4 text-white bg-blue-100">

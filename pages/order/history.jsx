@@ -207,7 +207,8 @@ const BagScreen = () => {
                               </div>
                             </div>}
 
-                            {collapsedItems.includes(i) && <div className={`pt-4 lg:pb-20 pb-8 ${!collapsedItems.includes(i) ? "hide" : "show"} `}>
+                            {collapsedItems.includes(i) && 
+                            <div className={`pt-4 lg:pb-20 pb-8 ${!collapsedItems.includes(i) ? "hide" : "show"} `}>
                               <div
                                  className="bg-yellow-500  flex w-full mb-8 text-yellow-500 cursor-pointer"
                                 onClick={() => toggleCollapse(i)}
@@ -361,7 +362,8 @@ const BagScreen = () => {
                                   </p>
                                 </div>
                               </div>
-                            </div>}
+                            </div>
+                            }
 
                           </>
                         );
