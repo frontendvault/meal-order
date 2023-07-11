@@ -311,7 +311,7 @@ const Index = () => {
                                 <p className='font-semibold'>No monthly subscription, you <br /> only pay once</p>
                             </div>
                             <div className='flex justify-center bg-blue-600 rounded-full py-1 w-11/12'>
-                                <button className='text-white whitespace-nowrap'>Get Started</button>
+                                <button className='text-white whitespace-nowrap'>Get Started</button> 
                             </div>
                         </div>
                     </div>
