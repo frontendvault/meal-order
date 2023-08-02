@@ -17,18 +17,18 @@ function MealItem({ meal }) {
 	const { addCartItem, cart, removeCartItem } = useCart();
 
 	const handleAddToCart = (meal, quantity) => {
-    if (quantity > 0) {
-		  addCartItem(meal.id, quantity);
-    } else {
-      removeCartItem(meal.id)
-    }
+		if (quantity > 0) {
+			addCartItem(meal.id, quantity);
+		} else {
+			removeCartItem(meal.id)
+		}
 	};
 	const cartItemsCount = useMemo(
-		() => 
+		() =>
 			cart.reduce((count, item) => {
-        if (item) {
-				  if (item.id === meal.id) return count + item.quantity;
-        }
+				if (item) {
+					if (item.id === meal.id) return count + item.quantity;
+				}
 				return count;
 			}, 0),
 		[cart, meal.id]
@@ -38,7 +38,7 @@ function MealItem({ meal }) {
 		if (meal.tags)
 			return meal.tags.map((tag) => (
 				<Badge color="pink" variant="light">
-					{tag}
+					{tag?.name}
 				</Badge>
 			));
 	};
@@ -52,30 +52,49 @@ function MealItem({ meal }) {
 					</Link>
 				</Card.Section>
 
-				<Group className="cursor-pointer" position="apart" mt="md">
+				<Group className="cursor-pointer" position="apart" mt="xs">
+				{/* <Group className="cursor-pointer" position="apart" mt="md"> */}
 					<Link href={`/meal/${meal.id}`}>
 						<Text weight={500}>{meal.name}</Text>
 					</Link>
 				</Group>
 				{renderMealTag()}
-        <Text size="sm" color="dimmed" lineClamp={3}>
+				<Text size="sm" color="dimmed" lineClamp={3}>
 					{meal.description}
 				</Text>
 				<Group position="apart" mb="xs" className="w-full">
-					<div className="flex items-center justify-between w-full">
-            <div>
-						  <Rating defaultValue={meal.rating} readOnly />
-            </div>
-						<Group className="cursor-pointer" position="apart" mt="xs" mb="xs">
+					<div className="flex items-center justify-between w-full flex-wrap">
+						<Group className="cursor-pointer" position="apart">
+						{/* <Group className="cursor-pointer" position="apart" mt="xs" mb="xs"> */}
 							<Link href={`/meal/${meal.id}`}>
 								<Text size={24} weight={500}>
 									{meal.price}$
 								</Text>
 							</Link>
 						</Group>
+						<div>
+							<Rating defaultValue={meal?.rating || 4} readOnly />
+						</div>
+						<div>
+							{cartItemsCount ? (
+								<div className="">
+									<Counter value={cartItemsCount} setValue={(value) => handleAddToCart(meal, value)} />
+								</div>
+							) : (
+								<Button
+									type="mantine-button"
+									className="bg-blue-500"
+									fullWidth
+									radius="md"
+									onClick={() => handleAddToCart(meal, 1)}
+								>
+									Add
+								</Button>
+							)}
+						</div>
 					</div>
 				</Group>
-				<div>
+				{/* <div>
 					{cartItemsCount ? (
 						<div className="mt-4">
 							<Counter value={cartItemsCount} setValue={(value) => handleAddToCart(meal, value)} />
@@ -91,7 +110,7 @@ function MealItem({ meal }) {
 							Add
 						</Button>
 					)}
-				</div>
+				</div> */}
 			</Card>
 			{/* <p className="absolute bg-red-500  px-2 text-white text-sm font-semibold right-2 rounded">
         {meal.type}

@@ -22,7 +22,6 @@ const menuItems = [
 const Header = () => {
   const { cart } = useCart();
   const [menu, setMenu] = useState(false);
-  const [cartItemsCount, setCartItemsCount] = useState(0)
 
   useEffect(() => {
     // setCartItemsCount(carts.cartItems.reduce((a, c) => a + c.quantity, 0));

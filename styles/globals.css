@@ -33,33 +33,3 @@ body {
 /* Page */
 @import "./pages/faq.css";
 
-.mainSubscriptionBg {
-  background-color: #e5e7eb
-}
-.subscriptionBg {
-  background-color: #dee2e6
-}
-
-
-/* .collapse-content {
-  height: auto;
-  overflow: hidden;
-  transition: all 1s ease-in-out;
-}
-
-.collapsed {
-  height: 0;
-} */
-
-.collapse-content {
-  transition: opacity 5s ease;
-  opacity: 0;
-}
-
-.show {
-  opacity: 1;
-}
-
-.hide {
-  opacity: 0;
-}

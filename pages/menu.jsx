@@ -4,44 +4,74 @@ import MealItem from "@/components/Menu/Item";
 import data from "@/utils/data";
 import { FaMapMarkerAlt, FaSearch } from "react-icons/fa";
 import Category from "@/components/Categories/Category";
-import { getMealsByRestaurant } from "../services/menu.api";
+import { getMenu } from "../services/menu.api";
 import { Box, LoadingOverlay, Text } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 export default function Menu() {
 	const [loading, setLoading] = useState(true);
-	const categories = [
-		"All",
-		...new Set(data.meals.map((item) => item.category)),
-	];
+	// const categories = [
+	// 	"All",
+	// 	...new Set(data.meals.map((item) => item.category)),
+	// ];
 	const [mealsInfo, setMealsInfo] = useState([]);
+	const [AllProduct, setAllProduct] = useState([])
+
 	const [activeCategory, setActiveCategory] = useState(null);
 	const [search, setSearch] = useState("");
+	
 	const [debouncedSearch] = useDebouncedValue(search, 1000);
+	const [categories, setCategories] = useState([])
 
-	const handleFetchMenu = async () => {
-		try {
-			setLoading(true);
-			getMealsByRestaurant({ name: debouncedSearch }).then(({ data }) => {
-				setMealsInfo(data.results);
-			});
-			const { data } = await getMealsByRestaurant({ name: debouncedSearch });
-			setMealsInfo(data.results);
-		} catch (error) {
-			toast.error(error?.message || error);
-		} finally {
+
+	const [range, setRange] = useState([50, 400]);
+
+	useEffect(() => {
+		axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/meals/${process.env.NEXT_PUBLIC_RESTAURANT_ID}`).then((response) => {
+			setMealsInfo(response.data.results);
+			setAllProduct(response.data.results)
 			setLoading(false);
-		}
-	};
+		});
+	}, [])
 
 	useEffect(() => {
-		handleFetchMenu();
-	}, []);
+		axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/tags`)
+			.then((response) => {
+				setCategories(response.data.results);
+				// setLoading(false);
+			});
+	}, [])
 
-	useEffect(() => {
-		handleFetchMenu();
-	}, [debouncedSearch]);
+	const handleSearch =(text)=>{
+		setSearch(text)
+		setMealsInfo(AllProduct?.filter((item)=>item?.name?.toLowerCase().indexOf(text?.toLowerCase()) !== -1))
+	}
+
+
+	// const handleFetchMenu = async () => {
+	// 	try {
+	// 		setLoading(true);
+	// 		getMenu().then(({ data }) => {
+	// 			setMealsInfo(data.results);
+	// 		});
+	// 		const { data } = await getMenu();
+	// 		setMealsInfo(data.results);
+	// 	} catch (error) {
+	// 		toast.error(error?.message || error);
+	// 	} finally {
+	// 		setLoading(false);
+	// 	}
+	// };
+
+	// useEffect(() => {
+	// 	handleFetchMenu();
+	// }, []);
+
+	// useEffect(() => {
+	// 	handleFetchMenu();
+	// }, [debouncedSearch]);
 
 	const filteredMeals = useMemo(() => {
 		return mealsInfo.filter((meal) => {
@@ -64,7 +94,7 @@ export default function Menu() {
 					<div className="mt-3 mb-5 flex relative md:mx-0">
 						<input
 							value={search}
-							onChange={(e) => setSearch(e.target.value)}
+							onChange={(e) => handleSearch(e.target.value)}
 							type="text"
 							placeholder="Search for meals..."
 							className=" hover:shadow-lg border w-full py-3 px-4 rounded outline-none bg-gray-200"
@@ -82,6 +112,11 @@ export default function Menu() {
 									categories={categories}
 									activeCategory={activeCategory}
 									setActiveCategory={(category) => setActiveCategory(category)}
+									mealsInfo={mealsInfo}
+									AllProduct={AllProduct}
+									setMealsInfo={setMealsInfo}
+									range={range}
+									setRange={setRange}
 								/>
 							</div>
 						</div>

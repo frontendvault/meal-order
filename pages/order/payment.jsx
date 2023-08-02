@@ -4,20 +4,21 @@ import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import CheckoutComponent from "../../components/CheckoutComponent";
 import Layout from "../../components/Layout";
-import { Store } from "@/utils/Store";
+import { Store } from "../../utils/Store";
+
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements } from '@stripe/react-stripe-js';
+import PaymentForm from '@/components/Payment/PaymentForm'
 
 export default function PaymentScreen() {
 
-  const router = useRouter();
+  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
+  const router = useRouter();
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
   const { state, dispatch } = useContext(Store);
-
-  const cart = state?.cart;
-
-  const shippingAddress = cart?.shippingAddress;
-
-  const paymentMethod = cart?.paymentMethod;
+  const { cart } = state;
+  const { shippingAddress, paymentMethod } = cart;
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -32,11 +33,9 @@ export default function PaymentScreen() {
     router.push("/placeorder");
   };
 
-  console.log("🚀 ~ file: client.js:9 ~ Client ~ constructor ~ process.env.NEXT_PUBLIC_API_ENDPOINT:", process.env.NEXT_PUBLIC_API_ENDPOINT)
-
   useEffect(() => {
     if (!shippingAddress.address) {
-      // return router.push("/shipping");
+      return router.push("/shipping");
     }
     setSelectedPaymentMethod(paymentMethod || "");
   }, [paymentMethod, router, shippingAddress.address]);
@@ -44,6 +43,11 @@ export default function PaymentScreen() {
   return (
     <Layout title="Payment Method">
       <CheckoutComponent activeStep={3} />
+
+      <Elements stripe={stripePromise}>
+        <PaymentForm checkadd={checkadd} checkoutData={checkoutData} />
+      </Elements>
+
       <form className="mx-auto max-w-screen-md" onSubmit={submitHandler}>
         <h1 className="mb-4 text-xl">Payment Method</h1>
         {["Stripe", "PayPal", "CashOnDelivery"].map((payment) => (
