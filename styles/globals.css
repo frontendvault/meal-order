@@ -33,3 +33,12 @@ body {
 /* Page */
 @import "./pages/faq.css";
 
+@layer components{
+  .btn--primary-profile{
+    @apply text-start px-4 py-2 text-sm font-medium tracking-wide rounded-md shadow-sm bg-blue-600 text-white hover:bg-blue-700;
+  }
+  .btn--dark-profile{
+    @apply w-auto px-4 py-2 text-sm font-medium tracking-wide rounded-md shadow-sm bg-gray-600 text-white hover:bg-gray-700;
+  }
+}
+

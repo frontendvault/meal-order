@@ -29,12 +29,12 @@ export default function Menu() {
 	const [range, setRange] = useState([50, 400]);
 
 	useEffect(() => {
-		axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/meals/${process.env.NEXT_PUBLIC_RESTAURANT_ID}`).then((response) => {
+		axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/meals/${process.env.NEXT_PUBLIC_RESTAURANT_ID}?search=${search}`).then((response) => {
 			setMealsInfo(response.data.results);
 			setAllProduct(response.data.results)
 			setLoading(false);
 		});
-	}, [])
+	}, [search])
 
 	useEffect(() => {
 		axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/tags`)
@@ -46,7 +46,7 @@ export default function Menu() {
 
 	const handleSearch =(text)=>{
 		setSearch(text)
-		setMealsInfo(AllProduct?.filter((item)=>item?.name?.toLowerCase().indexOf(text?.toLowerCase()) !== -1))
+		// setMealsInfo(AllProduct?.filter((item)=>item?.name?.toLowerCase().indexOf(text?.toLowerCase()) !== -1))
 	}
 
 
