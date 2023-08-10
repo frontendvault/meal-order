@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { FaBars, FaRegWindowClose } from "react-icons/fa";
 import Image from "next/image";
 import { useCart } from "@/utils/providers/cart.provider";
+import Cookies from "js-cookie";
+import PrivateRoute from "./privateRoute/PrivateRoute";
 
 const menuItems = [
   {
@@ -22,7 +24,7 @@ const menuItems = [
 const Header = () => {
   const { cart } = useCart();
   const [menu, setMenu] = useState(false);
-  const [cartItemsCount, setCartItemsCount] = useState(0)
+  const [token, setToken] = useState("")
 
   useEffect(() => {
     // setCartItemsCount(carts.cartItems.reduce((a, c) => a + c.quantity, 0));
@@ -33,6 +35,11 @@ const Header = () => {
     dispatch({ type: "CART_RESET" });
     signOut({ callbackUrl: "/login" });
   };
+
+  useEffect(() => {
+    const Token = Cookies.get("access-token");
+    setToken(Token)
+  }, [Cookies])
 
   return (
     <header className="fixed z-20 w-screen py-1 p-4 md:px-16 bg-white  border-b-4 border-blue-700">
@@ -61,9 +68,11 @@ const Header = () => {
             </Link>
           ))}
 
-          <Link href="/auth/sign-up">
-            <button className="text-blue-600 font-bold">My Account</button>
-          </Link>
+          {/* <PrivateRoute> */}
+            <Link href={token ? "/profile" : "/auth/sign-up"}>
+              <button className="text-blue-600 font-bold">My Account</button>
+            </Link>
+          {/* </PrivateRoute> */}
           <button className="py-2 px-5 bg-blue-600 rounded text-white font-bold">
             Order Now
           </button>

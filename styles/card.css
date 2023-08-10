@@ -5,3 +5,119 @@
 .card img {
   @apply rounded-t;
 }
+
+.tag_widget ul li {
+  display: inline-block;
+}
+
+.tag_widget ul li a {
+  margin: 0 6px 5px 0;
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+  border: 1px solid #ebebeb;
+  background: #ffffff;
+  padding: 8px 14px;
+  line-height: 20px;
+  color: #5a5a5a;
+  text-transform: capitalize;
+  border-radius: 3px;
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  .tag_widget ul li a {
+      padding: 0 13px;
+  }
+}
+
+/* .tag_widget ul li a:hover {
+  background: #00516c;
+  color: #fff;
+  border-color: #00516c;
+} */
+
+.widget_list.widget_brands ul li,
+.widget_list.widget_color ul li {
+    line-height: 44px;
+    position: relative;
+    padding-left: 28px;
+}
+
+.widget_list.widget_brands ul li input,
+.widget_list.widget_color ul li input {
+    position: absolute;
+    content: "\f383";
+    font-family: "Ionicons";
+    display: inline-block;
+    height: 17px;
+    width: 17px;
+    text-align: center;
+    line-height: 17px;
+    border-radius: 3px;
+    border: 1px solid #888;
+    color: transparent;
+    accent-color: #228be6 !important;
+    top: 50%;
+    left: 0;
+    transform: translatey(-50%);
+}
+
+.widget_list.widget_brands ul li span,
+.widget_list.widget_color ul li span {
+    color: #5a5a5a;
+    font-size: 15px;
+    float: right;
+}
+
+.widget_list.widget_brands ul li a,
+.widget_list.widget_color ul li a {
+    color: #5a5a5a;
+    font-size: 15px;
+    text-transform: capitalize;
+}
+
+.widget_list.widget_brands ul li a:hover,
+.widget_list.widget_color ul li a:hover {
+    color: #228be6;
+}
+
+.widget_list.widget_filter form {
+  padding-top: 10px;
+}
+
+.widget_list.widget_filter form input {
+  background: none;
+  border: none;
+  font-size: 14px;
+  float: left;
+  line-height: 31px;
+  width: 100%;
+  color: #5a5a5a;
+  font-weight: 500;
+}
+
+.widget_list.widget_filter form button {
+  height: 30px;
+  line-height: 30px;
+  padding: 0 16px;
+  font-size: 12px;
+  text-transform: capitalize;
+  color: #ffffff;
+  background: #212121;
+  border: 0;
+  border-radius: 3px;
+  font-weight: 500;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.widget_list.widget_filter form button:hover {
+  background: #00516c;
+}
+
+.price_slider {
+  color: #228be6 !important;
+  height: 3px;
+  /* left: 5%; */
+  width: 90%;
+}

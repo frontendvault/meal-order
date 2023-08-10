@@ -1,5 +1,6 @@
 import TextField from "@/components/input/TextField";
 import client from "@/utils/client";
+import axios from "axios";
 import { useFormik } from "formik";
 import Cookies from "js-cookie";
 import Head from "next/head";
@@ -22,7 +23,7 @@ const validationSchema = yup.object({
   email: yup.string().email().required(),
 });
 
-function signup() {
+function Signup() {
   const [agreed, setAgreed] = useState(false);
   const [agreedError, setAgreedError] = useState(false);
   const router = useRouter();
@@ -37,6 +38,21 @@ function signup() {
     },
     validationSchema,
     onSubmit: (values) => {
+      console.log("🚀 ~ file: sign-up.jsx:40 ~ signup ~ values:", values)
+
+      // axios.post(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/auth/register`, { ...values, confirm_password: undefined })
+      //   .then(({ data }) => {
+      //     Cookies.set("refresh-token", data.tokens.refresh.token);
+      //     Cookies.set("access-token", data.tokens.access.token);
+      //     toast.success("Successfully Registered.");
+      //     router.push("/");
+      //     formik.setSubmitting(false);
+      //   })
+      //   .catch((res) => {
+      //     formik.setSubmitting(false);
+      //     console.log(res);
+      //   });
+
       client
         .post("/v1/auth/register", { ...values, confirm_password: undefined })
         .then(({ data }) => {
@@ -188,4 +204,4 @@ function signup() {
   );
 }
 
-export default signup;
+export default Signup;
