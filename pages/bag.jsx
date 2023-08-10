@@ -15,6 +15,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { createPaymentIntent } from "@/services/paymentIntent.api";
 import CheckoutForm from "@/components/views/bag/CheckoutForm";
+import Select from 'react-select';
 
 const stripePromise = loadStripe(
 	process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
@@ -26,13 +27,23 @@ function BagScreen() {
 	const [shippingFormValues, setShippingFormValues] = useState({});
 	const [clientSecret, setClientSecret] = useState("");
 	const [paymentIntent, setPaymentIntent] = useState({});
-	const [quantity, setQuantity] = useState(1)
+	const [quantity, setQuantity] = useState(2)
 
 	const { user } = useUser();
 
-	const totalPrice = () => {
-		return cartMeals.reduce((a, c) => a + c.quantity * c.price, 0) + 69;
-	};
+	// const totalPrice = () => {
+	// 	return cartMeals.reduce((a, c) => a + c.quantity * c.price, 0) + 69;
+	// };
+
+	const initialValue = 0;
+	const TotalPrice = cartMeals?.reduce(
+		(accumulator, currentValue) => accumulator + currentValue?.price * currentValue?.quantity,
+		initialValue
+	);
+
+	useEffect(() => {
+		setCartMeals(cart)
+	}, [cart])
 
 	// useEffect(() => {
 	// 	if (!cart.length) {
@@ -84,16 +95,29 @@ function BagScreen() {
 
 	const subscriptionDetail = [1, 2, 3, 4]
 	const subscriptionDetail2 = [1, 2]
-	const quantintyOption = [1, 2, 3, 4, 5, 6, 7, 8]
+	const quantintyOption = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 	const onOptionChangeHandler = (event) => {
 		setQuantity(event.target.value)
+	}
+
+	const handleAddToCart = (meal, event) => {
+		// if (quantity > 0) {
+		setQuantity(meal?.quantity)
+		addCartItem(meal.id, event.target.value, meal.price);
+		// } else {
+		// 	removeCartItem(meal.id)
+		// }
+	};
+
+	const handleRemove = (id) => {
+		removeCartItem(id)
 	}
 
 	return (
 		<div>
 			<Layout title="MPO - Shopping Bag">
 				<div className="container mx-auto mt-10 p-5">
-					<div className="border-b border-gray-200 pb-3">
+					<div className="border-b border-gray-200 pb-3 mb-3">
 						{" "}
 						<a href="/menu" className="flex items-center text-sm mb-2 mr-2">
 							{/* <ChevronLeftIcon className="h-3 w-3 mr-2" /> */}
@@ -104,7 +128,7 @@ function BagScreen() {
 					<div
 					// className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16"
 					>
-						{isCartEmpty && (
+						{isCartEmpty ? (
 							<section
 								aria-labelledby="cart-heading"
 								className="w-full lg:w-2/3"
@@ -143,12 +167,10 @@ function BagScreen() {
 									</li>
 								</div>
 							</section>
-						)}
-
-						<div >
+						) : <div>
 							<div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
 								<div className="  lg:col-span-2">
-									{subscriptionDetail?.map((data, index) => <div className="pt-4 lg:pb-20 pb-4">
+									{cartMeals?.map((data, index) => <div className="pt-4 lg:pb-20 pb-4">
 										<div className="flex flex-col gap-12 lg:px-6 px-0">
 											<div className="flex lg:gap-8 gap-4 lg:flex-row flex-col items-center">
 												<div className="grow-0 lg:flex-row flex-col flex items-center lg:gap-8 gap-4">
@@ -156,7 +178,7 @@ function BagScreen() {
 													<Image
 														width="150"
 														height="150"
-														src="/images/17.jpg"
+														src={data?.mealId?.image}
 														alt=""
 														className="h-full w-full object-cover"
 														unoptimized={true}
@@ -164,16 +186,16 @@ function BagScreen() {
 
 													<div className="grow mr-12">
 														<h4 className="font-bold text-xl ">
-															Chicken & Rice Protein Packs
+															{data?.mealId?.name}
 														</h4>
 														<p className="text-sm">
-															Height : 10 inches
+															description : {data?.mealId?.description}
 														</p>
 														<p className="text-sm">
-															Macros : Black
+															ingredients : {data?.mealId?.ingredients?.map((data, index) => `${data} , `)}
 														</p>
 														<p className="text-sm">
-															Composition : 100% calf leather
+															Tags : {data?.mealId?.tags?.map((data, index) => `${data?.name} , `)}
 														</p>
 														<div className="flex">
 															<Link href={"/"}>
@@ -181,7 +203,7 @@ function BagScreen() {
 																	Add to favourites
 																</span>
 															</Link>
-															<Link href={"/"}>
+															<Link href={"/bag"} onClick={() => removeCartItem(data?.mealId?.id)}>
 																<span className="flex underline text-md  text-red-500 cursor-pointer">
 																	remove
 																</span>
@@ -191,15 +213,30 @@ function BagScreen() {
 
 													<div className=" grow ml-12 flex justify-around lg:flex-col md:flex-col xl:flex-col 2xl:flex-col">
 
-														<select onChange={onOptionChangeHandler} className="border-solid border-2 border-black-500 mb-6 mr-6">
+														<select onChange={(event) => handleAddToCart(data?.mealId, event)} className="border-solid border-2 border-black-500 mb-6 mr-6">
 															{quantintyOption?.map((option, index) => {
-																return <option key={index} value={option} >
+																return <option key={index} value={quantity}>
 																	{`0${option}`}
 																</option>
 															})}
 														</select>
+
+														{/* <Select
+															// {...props}
+															onChange={(event) => handleAddToCart(data?.mealId, event)}
+															// onBlur={() => props.input.onBlur(props.input.value)}//If needed
+															defaultValue={data?.quantity}
+															options={quantintyOption}
+															// placeholder={props.placeholder}
+														/> */}
+
+														{/* <Select
+															value={quantintyOption}
+															options={quantintyOption}
+															// defaultValue={data?.quantity}
+														/> */}
 														<h4 className="font-bold text-xl">
-															$250
+															{`$${data?.mealId?.price}`}
 														</h4>
 													</div>
 												</div>
@@ -220,7 +257,7 @@ function BagScreen() {
 												Subtotal
 											</div>
 											<div className="">
-												$9,000
+												{`$${TotalPrice}`}
 											</div>
 										</div>
 										<div className="self-stretch flex flex-row items-center justify-around">
@@ -228,7 +265,7 @@ function BagScreen() {
 												Shipping
 											</div>
 											<div className="">
-												$30
+												--
 											</div>
 										</div>
 										<div className="self-stretch flex flex-row items-center justify-around ">
@@ -236,7 +273,7 @@ function BagScreen() {
 												Tax
 											</div>
 											<div className="">
-												$39
+												--
 											</div>
 										</div>
 									</div>
@@ -246,13 +283,14 @@ function BagScreen() {
 												Total
 											</div>
 											<div className="relative  font-bold">
-												$10,240
+												{`$${TotalPrice}`}
 											</div>
 										</div>
 										<div className="self-stretch bg-royalblue flex flex-row p-5 items-center justify-center text-base text-white">
-											<button class=" w-full bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+											<Link href={'/order/payment'} className="w-full">	<button className=" w-full bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
 												CheckOut
 											</button>
+											</Link>
 										</div>
 									</div>
 								</div>
@@ -298,7 +336,7 @@ function BagScreen() {
 																Add to favourites
 															</span>
 														</Link>
-														<Link href={"/"}>
+														<Link href={"/bag"}>
 															<span className="flex underline text-md  text-red-500 cursor-pointer">
 																remove
 															</span>
@@ -398,7 +436,7 @@ function BagScreen() {
 	<path d="M2.42773 133.786H132.999C133.006 130.143 131.591 126.642 129.057 124.026C126.522 121.41 123.067 119.885 119.426 119.777C115.785 119.668 112.245 120.984 109.559 123.445C106.873 125.906 105.253 129.317 105.043 132.953" stroke="black" strokeWidth={4.66327} strokeLinecap="round" strokeLinejoin="round" />
 </svg> */}
 							</div>
-						</div>
+						</div>}
 
 						{clientSecret && (
 							<Elements options={options} stripe={stripePromise}>

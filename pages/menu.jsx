@@ -9,6 +9,7 @@ import { Box, LoadingOverlay, Text } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { getTags } from "@/services/tag.api";
 
 export default function Menu() {
 	const [loading, setLoading] = useState(true);
@@ -21,7 +22,7 @@ export default function Menu() {
 
 	const [activeCategory, setActiveCategory] = useState(null);
 	const [search, setSearch] = useState("");
-	
+
 	const [debouncedSearch] = useDebouncedValue(search, 1000);
 	const [categories, setCategories] = useState([])
 
@@ -37,14 +38,14 @@ export default function Menu() {
 	}, [search])
 
 	useEffect(() => {
-		axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/tags`)
+		getTags()
 			.then((response) => {
 				setCategories(response.data.results);
 				// setLoading(false);
 			});
 	}, [])
 
-	const handleSearch =(text)=>{
+	const handleSearch = (text) => {
 		setSearch(text)
 		// setMealsInfo(AllProduct?.filter((item)=>item?.name?.toLowerCase().indexOf(text?.toLowerCase()) !== -1))
 	}

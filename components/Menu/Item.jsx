@@ -15,19 +15,22 @@ function classNames(...classes) {
 function MealItem({ meal }) {
 	const [openModal, setOpenModal] = useState(false);
 	const { addCartItem, cart, removeCartItem } = useCart();
+	// console.log("🚀 ~ file: Item.jsx:18 ~ MealItem ~ cart:", cart)
 
 	const handleAddToCart = (meal, quantity) => {
-		if (quantity > 0) {
-			addCartItem(meal.id, quantity);
-		} else {
-			removeCartItem(meal.id)
-		}
+		// if (quantity > 0) {
+			addCartItem(meal.id, quantity, meal.price);
+		// } else {
+		// 	removeCartItem(meal.id)
+		// }
 	};
+
+	
 	const cartItemsCount = useMemo(
 		() =>
 			cart.reduce((count, item) => {
 				if (item) {
-					if (item.id === meal.id) return count + item.quantity;
+					if (item.mealId === meal.id) return count + item.quantity;
 				}
 				return count;
 			}, 0),
@@ -53,7 +56,7 @@ function MealItem({ meal }) {
 				</Card.Section>
 
 				<Group className="cursor-pointer" position="apart" mt="xs">
-				{/* <Group className="cursor-pointer" position="apart" mt="md"> */}
+					{/* <Group className="cursor-pointer" position="apart" mt="md"> */}
 					<Link href={`/meal/${meal.id}`}>
 						<Text weight={500}>{meal.name}</Text>
 					</Link>
@@ -65,7 +68,7 @@ function MealItem({ meal }) {
 				<Group position="apart" mb="xs" className="w-full">
 					<div className="flex items-center justify-between w-full flex-wrap">
 						<Group className="cursor-pointer" position="apart">
-						{/* <Group className="cursor-pointer" position="apart" mt="xs" mb="xs"> */}
+							{/* <Group className="cursor-pointer" position="apart" mt="xs" mb="xs"> */}
 							<Link href={`/meal/${meal.id}`}>
 								<Text size={24} weight={500}>
 									{meal.price}$
@@ -76,7 +79,7 @@ function MealItem({ meal }) {
 							<Rating defaultValue={meal?.rating || 4} readOnly />
 						</div>
 						<div>
-							{cartItemsCount ? (
+							{cartItemsCount  ? (
 								<div className="">
 									<Counter value={cartItemsCount} setValue={(value) => handleAddToCart(meal, value)} />
 								</div>
