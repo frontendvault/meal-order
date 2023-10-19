@@ -14,35 +14,33 @@ function CartProvider({ children }) {
 	const addCartItem = (item, quantity, price) => {
 		axios
 			.post(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/carts/`, {
-
 				userId: "64c9d87f7fd51e047142df7d",
 				items: [
 					{
-						"mealId": item,
-						"quantity": quantity,
-						"price": price,
-						"total": (quantity * price)
-					}
+						mealId: item,
+						quantity: quantity,
+						price: price,
+						total: quantity * price,
+					},
 				],
 				// "subTotal" : 160
 			})
-		// addToCart({
-		// 	userId: "64c9d87f7fd51e047142df7d",
-		// 		items: [
-		// 			{
-		// 				"mealId": item,
-		// 				"quantity": quantity,
-		// 				"price": price,
-		// 				"total": (quantity * price)
-		// 			}
-		// 		],
-		// 		// "subTotal" : 160
-		// })
-			.then(response => {
+			// addToCart({
+			// 	userId: "64c9d87f7fd51e047142df7d",
+			// 		items: [
+			// 			{
+			// 				"mealId": item,
+			// 				"quantity": quantity,
+			// 				"price": price,
+			// 				"total": (quantity * price)
+			// 			}
+			// 		],
+			// 		// "subTotal" : 160
+			// })
+			.then((response) => {
 				setCart(response.data?.items);
-
 			})
-			.catch(err => {
+			.catch((err) => {
 				console.log(err);
 			});
 		// setCart((prevCartItems) => {
@@ -64,21 +62,23 @@ function CartProvider({ children }) {
 	};
 
 	const removeCartItem = (id) => {
-
-		axios.delete(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/carts/64c9d87f7fd51e047142df7d`, {
-			data: {
-				"mealId": id
-			}
-		})
-			.then(response => {
-				console.log('Item deleted successfully');
+		axios
+			.delete(
+				`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/carts/64c9d87f7fd51e047142df7d`,
+				{
+					data: {
+						mealId: id,
+					},
+				}
+			)
+			.then((response) => {
+				console.log("Item deleted successfully");
 				// Perform additional actions if needed
 			})
-			.catch(error => {
-				console.error('Error deleting item:', error);
+			.catch((error) => {
+				console.error("Error deleting item:", error);
 			});
 		// setCart((prevCartItems) => prevCartItems.filter((item) => item.id !== id));
-
 	};
 
 	// const updateCart = (updatedCart) => {
@@ -92,11 +92,20 @@ function CartProvider({ children }) {
 	// }, [cart]);
 
 	useEffect(() => {
-		axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/carts/64c9d87f7fd51e047142df7d`)
-			.then((response) => {
+		const getCarts = async () => {
+			try {
+				console.log(process.env.NEXT_PUBLIC_API_ENDPOINT);
+				const response = await axios.get(
+					`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/carts/64c9d87f7fd51e047142df7d`
+				);
 				setCart(response?.data?.items);
-			});
-	}, [])
+			} catch (error) {
+				console.log(error);
+			}
+		};
+
+		getCarts();
+	}, []);
 
 	// useEffect(() => {
 	// 	// if (cartCookie) {
