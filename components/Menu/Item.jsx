@@ -7,6 +7,7 @@ import { CartContext, useCart } from "@/utils/providers/cart.provider";
 import { Card, Image, Badge, Button, Group, Text, Rating } from "@mantine/core";
 import { useRouter } from "next/router";
 import Counter from "../Counter";
+import Cookies from "js-cookie";
 
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
@@ -15,17 +16,21 @@ function classNames(...classes) {
 function MealItem({ meal }) {
 	const [openModal, setOpenModal] = useState(false);
 	const { addCartItem, cart, removeCartItem } = useCart();
+	const router = useRouter();
 	// console.log("🚀 ~ file: Item.jsx:18 ~ MealItem ~ cart:", cart)
 
 	const handleAddToCart = (meal, quantity) => {
 		// if (quantity > 0) {
-			addCartItem(meal.id, quantity, meal.price);
+		const Token = Cookies.get("access-token");
+		if (!Token) {
+			return router.push("/auth/login");
+		}
+		addCartItem(meal.id, quantity, meal.price);
 		// } else {
 		// 	removeCartItem(meal.id)
 		// }
 	};
 
-	
 	const cartItemsCount = useMemo(
 		() =>
 			cart.reduce((count, item) => {
@@ -79,9 +84,12 @@ function MealItem({ meal }) {
 							<Rating defaultValue={meal?.rating || 4} readOnly />
 						</div>
 						<div>
-							{cartItemsCount  ? (
+							{cartItemsCount ? (
 								<div className="">
-									<Counter value={cartItemsCount} setValue={(value) => handleAddToCart(meal, value)} />
+									<Counter
+										value={cartItemsCount}
+										setValue={(value) => handleAddToCart(meal, value)}
+									/>
 								</div>
 							) : (
 								<Button

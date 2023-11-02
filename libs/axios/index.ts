@@ -57,8 +57,6 @@ const http = async (
 			options.data = data;
 		}
 
-		console.log("query ==> ", query);
-
 		if (query && method === "GET") {
 			options.params = JSON.stringify(query);
 		}

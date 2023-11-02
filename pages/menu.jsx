@@ -1,14 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Layout from "../components/Layout";
 import MealItem from "@/components/Menu/Item";
-import data from "@/utils/data";
 import { FaMapMarkerAlt, FaSearch } from "react-icons/fa";
 import Category from "@/components/Categories/Category";
-import { getMenu } from "../services/menu.api";
-import { Box, LoadingOverlay, Text } from "@mantine/core";
-import { useDebouncedValue } from "@mantine/hooks";
+import { LoadingOverlay, Text } from "@mantine/core";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { getTags } from "@/services/tag.api";
 import { httpClient } from "@/libs";
 import { debounce } from "@/utils/debounce";
@@ -19,88 +15,70 @@ export const getServerSideProps = async (context) => {
 		method: "GET",
 		path: {
 			url: "MENU",
-			params: {
-				restaurantId: process.env.NEXT_PUBLIC_RESTAURANT_ID,
-			},
 		},
 	});
 
-	console.log("SERVER RESPONSE =-==> ", response, error);
 	return {
 		props: {
-			meals: [],
+			meals: response?.data?.results || [],
+			error,
 		},
 	};
 };
 
-export default function Menu({ meals }) {
-	console.log("MEansl =-=> ", meals);
+export default function Menu({ meals, error }) {
 	const [loading, setLoading] = useState(true);
-	// const categories = [
-	// 	"All",
-	// 	...new Set(data.meals.map((item) => item.category)),
-	// ];
-	const [mealsInfo, setMealsInfo] = useState([]);
+	const [mealsInfo, setMealsInfo] = useState(meals || []);
 	const [AllProduct, setAllProduct] = useState([]);
-
 	const [activeCategory, setActiveCategory] = useState(null);
 	const [search, setSearch] = useState("");
 
-	const [debouncedSearch] = useDebouncedValue(search, 1000);
 	const [categories, setCategories] = useState([]);
-
 	const [range, setRange] = useState([50, 400]);
 
 	useEffect(() => {
+		// check if we have error on the api level on server side while generating the page
+		if (error) {
+			toast.error(error?.message || error);
+			return;
+		}
+
 		const getMenu = () => {
 			debounce(async () => {
-				console.log("debounce ===> ");
 				try {
 					setLoading(true);
 					const { response, error } = await httpClient({
 						method: "GET",
 						path: {
 							url: "MENU",
-							params: {
-								restaurantId: process.env.NEXT_PUBLIC_RESTAURANT_ID,
-								search,
-							},
 						},
 					});
-
-					console.log("Response ===> ", response.data);
 
 					if (error) {
 						toast.error(error?.message || error);
 						return;
 					}
 
-					// const response = await axios.get(
-					// 	`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/meals/${process.env.NEXT_PUBLIC_RESTAURANT_ID}?search=${search}`
-					// );
-
-					// if (response.status === 404) {
-					// 	console.log("NOT FOUND");
-					// 	return;
-					// }
-
 					setMealsInfo(response.data.results);
 					setAllProduct(response.data.results);
 				} catch (error) {
-					console.log(error);
+					toast.error(error?.message || error);
 				} finally {
 					setLoading(false);
 				}
 			})();
 		};
 
-		getMenu();
+		if (search || (!mealsInfo && !mealsInfo?.length)) {
+			getMenu();
+		} else {
+			setLoading(false);
+		}
 	}, [search]);
 
 	useEffect(() => {
 		const tags = async () => {
 			const response = await getTags();
-			console.log("Response ==> ", response);
 
 			if (response && response.data) {
 				setCategories(response.data.results);
@@ -112,31 +90,7 @@ export default function Menu({ meals }) {
 
 	const handleSearch = (text) => {
 		setSearch(text);
-		// setMealsInfo(AllProduct?.filter((item)=>item?.name?.toLowerCase().indexOf(text?.toLowerCase()) !== -1))
 	};
-
-	// const handleFetchMenu = async () => {
-	// 	try {
-	// 		setLoading(true);
-	// 		getMenu().then(({ data }) => {
-	// 			setMealsInfo(data.results);
-	// 		});
-	// 		const { data } = await getMenu();
-	// 		setMealsInfo(data.results);
-	// 	} catch (error) {
-	// 		toast.error(error?.message || error);
-	// 	} finally {
-	// 		setLoading(false);
-	// 	}
-	// };
-
-	// useEffect(() => {
-	// 	handleFetchMenu();
-	// }, []);
-
-	// useEffect(() => {
-	// 	handleFetchMenu();
-	// }, [debouncedSearch]);
 
 	const filteredMeals = useMemo(() => {
 		return mealsInfo?.filter?.((meal) => {

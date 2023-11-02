@@ -13,7 +13,7 @@ function CartProvider({ children }) {
 
 	const addCartItem = (item, quantity, price) => {
 		axios
-			.post(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/carts/`, {
+			.post(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/cart/`, {
 				userId: "64c9d87f7fd51e047142df7d",
 				items: [
 					{
@@ -64,7 +64,7 @@ function CartProvider({ children }) {
 	const removeCartItem = (id) => {
 		axios
 			.delete(
-				`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/carts/64c9d87f7fd51e047142df7d`,
+				`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/cart/64c9d87f7fd51e047142df7d`,
 				{
 					data: {
 						mealId: id,
@@ -96,7 +96,7 @@ function CartProvider({ children }) {
 			try {
 				console.log(process.env.NEXT_PUBLIC_API_ENDPOINT);
 				const response = await axios.get(
-					`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/carts/64c9d87f7fd51e047142df7d`
+					`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/cart/64c9d87f7fd51e047142df7d`
 				);
 				setCart(response?.data?.items);
 			} catch (error) {
