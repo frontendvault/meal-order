@@ -1,44 +1,44 @@
 import Head from "next/head";
-import Link from "next/link";
 import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import * as yup from "yup";
+import { useFormik } from "formik";
+import TextField from "@/components/input/TextField";
+import client from "@/utils/client";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import Link from "next/link";
+
+const validationSchema = yup.object({
+  email: yup.string().email().required(),
+  password: yup.string().min(8).required(),
+});
 
 function LoginScreen() {
-  // const { data: session } = useSession();
   const router = useRouter();
-  // const { redirect } = router.query;
 
-  //When there is a change in the session, useEffect runs...
-  // useEffect(() => {
-  //   if (session?.user) {
-  //     router.push(redirect || "/");
-  //   }
-  // }, [router, session, redirect]);
-
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
-
-  const submitHandler = async ({ email, password }) => {
-    // console.log(email, password);
-    try {
-      const result = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
-      });
-      if (result.error) {
-        toast.error(result.error);
-      }
-    } catch (err) {
-      toast.error(getError(err));
-    }
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      client
+        .post("/v1/auth/login", values)
+        .then(({ data }) => {
+          Cookies.set("refresh-token", data.tokens.refresh.token);
+          Cookies.set("access-token", data.tokens.access.token);
+          toast.success("Successfully Logged In.");
+          router.push("/");
+          formik.setSubmitting(false);
+        })
+        .catch((res) => {
+          formik.setSubmitting(false);
+        });
+    },
+  });
 
   return (
     <>
@@ -53,11 +53,8 @@ function LoginScreen() {
       <div className="grid md:grid-cols-2 h-screen w-screen">
         <div className="col-1 bg-gray-200 hidden md:flex">
           <Image
-            // className="  h-screen w-full object-contain"
             src="/images/17.jpg"
             alt=""
-            // layout="fill"
-            // objectFit="contain"
             className="w-1/2"
             width={600}
             height={600}
@@ -73,71 +70,21 @@ function LoginScreen() {
 
             <div className="mt-8 md:mr-10 md:pr-10">
               <div className="mt-6">
-                <form
-                  className="space-y-1"
-                  onSubmit={handleSubmit(submitHandler)}
-                >
+                <form className="space-y-1" onSubmit={formik.handleSubmit}>
                   <div className="grid grid-cols-2 gap-3 flex-1"></div>
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Email Address
-                    </label>
-                    <div className="mt-1">
-                      <input
-                        id="email"
-                        type="email"
-                        {...register("email", {
-                          required: "Please enter your email",
-                          pattern: {
-                            value:
-                              /^[a-zA-Z0-9_.+-]+@[a-zA_Z0-9-]+.[a-zA-Z0-9]+$/i,
-                            message: "Please Enter a valid email address",
-                          },
-                        })}
-                        placeholder="obama@yakunbo.com"
-                        autoFocus
-                        className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                      />
-                      {errors.email && (
-                        <div className="font-base text-red-600">
-                          {errors.email.message}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <label
-                      htmlFor="password"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Password
-                    </label>
-                    <div className="mt-1">
-                      <input
-                        id="password"
-                        type="password"
-                        {...register("password", {
-                          required: "Please enter password",
-                          minLength: {
-                            value: 8,
-                            message: "Please enter should be 8 characters ",
-                          },
-                        })}
-                        autoFocus
-                        placeholder="Enter your password here"
-                        className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                      />
-                      {errors.password && (
-                        <div className="font-base text-red-600">
-                          {errors.password.message}
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                  <TextField
+                    label="Email"
+                    placeholder="Email"
+                    {...formik.getFieldProps("email")}
+                    error={formik.errors.email}
+                  />
+                  <TextField
+                    label="Password"
+                    placeholder="Password"
+                    type="password"
+                    {...formik.getFieldProps("password")}
+                    error={formik.errors.password}
+                  />
 
                   <div className="flex items-center py-3">
                     <input
@@ -156,6 +103,7 @@ function LoginScreen() {
 
                   <div>
                     <button
+                      disabled={formik.isSubmitting}
                       type="submit"
                       className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
@@ -166,9 +114,7 @@ function LoginScreen() {
                     Don't have an account?&nbsp;
                     <span className="text-blue-700 font-medium">
                       {" "}
-                      {/* <Link href={`/signup?redirect=${redirect || "/menu"}`}>
-                        Click here to Signup
-                      </Link> */}
+                      <Link href={`/auth/sign-up`}>Click here to Signup</Link>
                     </span>
                   </div>
                   <div>
@@ -253,5 +199,6 @@ function LoginScreen() {
     </>
   );
 }
+LoginScreen.guest = true;
 
 export default LoginScreen;

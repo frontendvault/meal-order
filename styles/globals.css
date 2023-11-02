@@ -1,6 +1,13 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply leading-[normal] m-0;
+}
+
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -16,15 +23,30 @@
   }
 }
 
-body {
 
+.main-bg {
+  background: url(../public/images/11.jpg) no-repeat center center;
+  background-size: cover;
+  width: 100%;
+  height: 100vh;
+}
+
+/* Component */
+@import "./modal.css";
+@import "./card.css";
+
+/* Page */
+@import "./pages/faq.css";
+
+@layer components{
+  .btn--primary-profile{
+    @apply text-start px-4 py-2 text-sm font-medium tracking-wide rounded-md shadow-sm bg-blue-600 text-white hover:bg-blue-700;
+  }
+  .btn--dark-profile{
+    @apply w-auto px-4 py-2 text-sm font-medium tracking-wide rounded-md shadow-sm bg-gray-600 text-white hover:bg-gray-700;
+  }
 }
 
 
-.main-bg { background: url(../public/images/11.jpg) no-repeat center center; background-size: cover; width: 100%; height: 100vh;}
-.card {
-  @apply shadow-lg bg-gray-100 rounded
-}
-.card img{ 
-  @apply  rounded-t
-}
+
+

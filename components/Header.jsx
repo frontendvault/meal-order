@@ -1,29 +1,45 @@
 import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
-import { Store } from "../utils/Store";
-// import "react-toastify/dist/ReactToastify.css";
-// import { signOut, useSession } from "next-auth/react";
-import { Menu } from "@headlessui/react";
-// import DropdownLink from "./DropdownLink";
-// import Cookies from "js-cookie";
 import { FaBars, FaRegWindowClose } from "react-icons/fa";
 import Image from "next/image";
+import { useCart } from "@/utils/providers/cart.provider";
+import Cookies from "js-cookie";
+import PrivateRoute from "./privateRoute/PrivateRoute";
+
+const menuItems = [
+  {
+    name: "Our Menu",
+    url: "/menu",
+  },
+  {
+    name: "My Bag",
+    url: "/bag",
+  },
+  {
+    name: "FAQ",
+    url: "/faq",
+  },
+];
 
 const Header = () => {
-  const { state, dispatch } = useContext(Store);
-  const { cart } = state;
-  const [cartItemsCount, setCartItemsCount] = useState(0);
+  const { cart } = useCart();
   const [menu, setMenu] = useState(false);
+  const [token, setToken] = useState("")
 
   useEffect(() => {
-    setCartItemsCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0));
-  }, [cart.cartItems]);
+    // setCartItemsCount(carts.cartItems.reduce((a, c) => a + c.quantity, 0));
+  }, [cart]);
 
-  // const logoutClickHandler = () => {
-  //   Cookies.remove("cart");
-  //   dispatch({ type: "CART_RESET" });
-  //   signOut({ callbackUrl: "/login" });
-  // };
+  const logoutClickHandler = () => {
+    Cookies.remove("cart");
+    dispatch({ type: "CART_RESET" });
+    signOut({ callbackUrl: "/login" });
+  };
+
+  useEffect(() => {
+    const Token = Cookies.get("access-token");
+    setToken(Token)
+  }, [Cookies])
 
   return (
     <header className="fixed z-20 w-screen py-1 p-4 md:px-16 bg-white  border-b-4 border-blue-700">
@@ -41,53 +57,22 @@ const Header = () => {
         </div>
 
         <div className="hidden md:flex justify-center items-center gap-8 text-blue-600 font-bold">
-          <Link href="/menu">Our Menu</Link>
-          <Link href="/bag">
-            <span className="relative ">
-              My Bag
-              {cart.cartItems.length > 0 && (
+          {menuItems.map((item) => (
+            <Link href={item.url} className="relative ">
+              {item.name}
+              {item.url === "/bag" && cart.length > 0 && (
                 <span className="absolute -top-1 -right-4 ml-1 rounded-lg bg-red-600 px-2 text-xs font-bold text-white">
-                  {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
+                  {cart.length}
                 </span>
               )}
-            </span>
-          </Link>
-          <button className="">FAQ</button>
-
-          {/* {status === "loading" ? (
-            "Loading"
-          ) : session?.user ? (
-            <Menu as="div" className="relative inline-block ">
-              <Menu.Button>{session.user.name}</Menu.Button>
-              <Menu.Items className="absolute right-0 w-56 origin-top-right shadow-lg bg-white">
-                <Menu.Item>
-                  <DropdownLink className="dropdown-link" href="/profile">
-                    Profile
-                  </DropdownLink>
-                </Menu.Item>
-                <Menu.Item>
-                  <DropdownLink className="dropdown-link" href="/order-history">
-                    Order History
-                  </DropdownLink>
-                </Menu.Item>
-                <Menu.Item>
-                  <a
-                    className="dropdown-link"
-                    href="#"
-                    onClick={logoutClickHandler}
-                  >
-                    Logout
-                  </a>
-                </Menu.Item>
-              </Menu.Items>
-            </Menu>
-          ) : (
-            <Link href="/login">
-              <a className="">My Account</a>
             </Link>
-          )} */}
+          ))}
 
-          {/* <button onClick="/signup" className="text-blue-600 font-bold">My Account</button> */}
+          {/* <PrivateRoute> */}
+            <Link href={token ? "/profile" : "/auth/sign-up"}>
+              <button className="text-blue-600 font-bold">My Account</button>
+            </Link>
+          {/* </PrivateRoute> */}
           <button className="py-2 px-5 bg-blue-600 rounded text-white font-bold">
             Order Now
           </button>
@@ -101,69 +86,36 @@ const Header = () => {
             >
               <FaRegWindowClose size={30} />
             </div>
-            <Link href="/menu" onClick={() => setMenu(!menu)}>
-              <a className="border-b border-blue-300 w-full text-center py-2">
-                Our Menu
-              </a>
+            <Link
+              href="/menu"
+              className="border-b border-blue-300 w-full text-center py-2"
+              onClick={() => setMenu(!menu)}
+            >
+              Our Menu
             </Link>
-            <Link href="/bag">
-              <a className="relative border-b border-blue-300 w-full text-center py-2">
-                My Bag
-                {cartItemsCount > 0 && (
-                  <span className="absolute -top-1 -right-4 ml-1 rounded-lg bg-red-600 px-2 text-xs font-bold text-white">
-                    {cartItemsCount}12
-                  </span>
-                )}
-              </a>
+            <Link
+              href="/bag"
+              className="relative border-b border-blue-300 w-full text-center py-2"
+            >
+              My Bag
+              {cartItemsCount > 0 && (
+                <span className="absolute -top-1 -right-4 ml-1 rounded-lg bg-red-600 px-2 text-xs font-bold text-white">
+                  {cartItemsCount}
+                </span>
+              )}
             </Link>
             <Link href={"faq"} className="">
               FAQ
             </Link>
 
-            {/* {status === "loading" ? (
-              "Loading"
-            ) : session?.user ? (
-              <Menu as="div" className="relative inline-block  ">
-                <Menu.Button>{session.user.name}</Menu.Button>
-                <Menu.Items className="absolute right-0 w-56 origin-top-right shadow-lg bg-white">
-                  <Menu.Item>
-                    <DropdownLink className="dropdown-link" href="/profile">
-                      Profile
-                    </DropdownLink>
-                  </Menu.Item>
-                  <Menu.Item>
-                    <DropdownLink
-                      className="dropdown-link"
-                      href="/order-history"
-                    >
-                      Order History
-                    </DropdownLink>
-                  </Menu.Item>
-                  <Menu.Item>
-                    <a
-                      className="dropdown-link"
-                      href="#"
-                      onClick={logoutClickHandler}
-                    >
-                      Logout
-                    </a>
-                  </Menu.Item>
-                </Menu.Items>
-              </Menu>
-            ) : (
-              <Link href="/login">
-                <a className="border-b border-blue-300 w-full text-center py-2">
-                  My Account
-                </a>
-              </Link>
-            )} */}
-
-            {/* <button onClick="/signup" className="text-blue-600 font-bold">My Account</button> */}
-            <Link href={""}>
-              <a className="bg-blue-500 text-white w-full text-center py-2">
-                {" "}
-                Order Now{" "}
-              </a>
+            <Link href="/auth/sign-up">
+              <button className="text-blue-600 font-bold">My Account</button>
+            </Link>
+            <Link
+              href={""}
+              className="bg-blue-500 text-white w-full text-center py-2"
+            >
+              Order Now{" "}
             </Link>
           </div>
         )}

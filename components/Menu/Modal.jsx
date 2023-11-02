@@ -2,41 +2,27 @@ import Link from "next/link";
 import React, { useContext } from "react";
 import { Store } from "../../utils/Store";
 import Image from "next/image";
-import { FaCross, FaStar } from "react-icons/fa";
+import { FaStar, FaTimes } from "react-icons/fa";
 
-function Modal({ open, meal, onClose }) {
+export default function MenuModal({ open, meal, onClose }) {
   const { state, dispatch } = useContext(Store);
 
   if (!open) return null;
 
-  const handleClose = (e) => {
-    if (e.target.id === "wrapper") onClose();
-  };
-
   const addToCartHandler = (meal) => {
     const existItem = state.cart.cartItems.find((x) => x.slug === meal.slug);
     const quantity = existItem ? existItem.quantity + 1 : 1;
-    // const { data } = await axios.get(`/api/meals/${meal._id}`);
-    // if (product.countInStock < quantity) {
-    //   return toast.error("Sorry. Meal is out of stock");
-    // }
     dispatch({ type: "CART_ADD_ITEM", payload: { ...meal, quantity } });
-    // toast.success("Meal added to the cart");
   };
 
   return (
-    <div
-      className="fixed z-50 inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center"
-      id="wrapper"
-      // onClick={() => onClose(handleClose)}
-    >
+    <div className="modal-backdrop" id="wrapper">
       <div className="bg-white relative modalCard flex ">
         <div
           className="flex text-md cursor-pointer items-center p-3 gap-2 font-semibold text-gray-600 absolute top-0 right-0 "
           onClick={() => onClose()}
         >
-          <p>Close</p>
-          <FaCross className="h-5 w-5" />
+          <FaTimes className="h-5 w-5" />
         </div>
         <div className="w-[700px] bg-white   flex flex-col ">
           <div className="">
@@ -136,5 +122,3 @@ function Modal({ open, meal, onClose }) {
     </div>
   );
 }
-
-export default Modal;

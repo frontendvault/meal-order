@@ -2,8 +2,9 @@ import Head from "next/head";
 import React from "react";
 import Footer from "./Footer";
 import Header from "./Header";
+import { LoadingOverlay } from "@mantine/core";
 
-function Layout({ children, title }) {
+function Layout({ children, title, loading = false }) {
   return (
     <>
       <Head>
@@ -17,7 +18,8 @@ function Layout({ children, title }) {
 
       <div className="flex flex-col justify-between">
         <Header />
-        <main key={title.toString()} className="mt-[84px] md:mt-[85px]">
+        <main key={title?.toString()} className="mt-[84px] md:mt-[85px]">
+          <LoadingOverlay visible={loading} />
           {children}
         </main>
         <footer>
